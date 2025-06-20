@@ -74,6 +74,16 @@
             overflow: hidden;
             transition: max-height 0.3s ease-out;
         }
+
+        /* Custom Table Column Widths for Detailed Table */
+        /* Adjusted widths for better visual balance */
+        .detailed-table th.w-phase, .detailed-table td.w-phase { width: 15%; min-width: 120px; }
+        .detailed-table th.w-step, .detailed-table td.w-step { width: 15%; min-width: 120px; }
+        .detailed-table th.w-challenge, .detailed-table td.w-challenge { width: 30%; min-width: 200px; }
+        .detailed-table th.w-solution, .detailed-table td.w-solution { width: 30%; min-width: 200px; }
+        .detailed-table th.w-ownership, .detailed-table td.w-ownership { width: 10%; min-width: 80px; } /* Adjusted for comma separation */
+
+        /* Removed responsive table behavior for smaller screens as per user request */
     </style>
 </head>
 <body class="bg-[#f8f7f4]">
@@ -105,44 +115,44 @@
 
 <script>
 const projectData = [
-    { category: "Conceptualization & Planning", step: "Formation of Interim Project Core Research Team (CRT)", challenge: "No designated research team exists, leading to a lack of accountability. Excessive workload falls on a single individual. Designated members do not work on the project, burdening others. Different responsibilities are handled by different people, preventing a comprehensive study understanding. Lack of clarity on team composition from the start.", solution: "Establish a dedicated Project Core Research Team (CRT) at project inception, clearly defining roles, responsibilities, and reporting lines for each member, including a senior researcher for oversight. Implement a RACI matrix to ensure accountability and prevent diffused responsibilities.", type: "People/Process" },
-    { category: "Conceptualization & Planning", step: "Initial presentation summarising the Concept Proposal", challenge: "Many core members don't have access to key documents before meetings. Members joining mid-project lack orientation. Extensive deviation from the approved research proposal occurs. Terminologies and objectives are open to individual interpretation.", solution: "Implement a centralized, accessible document management system. Develop and implement a standardized onboarding checklist and orientation program for all new team members. Establish a strict change control process for any deviation from the proposal.", type: "Process/People" },
-    { category: "Conceptualization & Planning", step: "Initial Kick-off and Planning/Conceptualisation Meeting", challenge: "A study's focus is diluted by trying to test too many innovations. The initial kick-off meeting either doesn't happen or lacks structured planning. Persistent misalignment between organizational vision and project deliverables.", solution: "Define a clear project scope and prioritize objectives. Mandate a formal project kick-off meeting with a predefined agenda and actionable conclusions. Ensure continuous alignment through regular reviews with senior leadership.", type: "Process" },
-    { category: "Conceptualization & Planning", step: "Detailed budget adaptation and circulation with key members", challenge: "Young team members experience confusion and lack of clarity. There is no mechanism for constructive, tangible feedback to refine plans.", solution: "Implement a structured mentorship program for junior team members. Establish a formal feedback mechanism for all project deliverables, facilitating structured review sessions.", type: "People" },
-    { category: "Introduction of PMS", step: "Assign an Interim/ Permanent Project Manager (PM)", challenge: "Not recruiting or dedicating a project manager at the start of the study causes delays and complicates streamlining efforts later.", solution: "Implement a policy for mandatory PM assignment at the project's initiation. If a permanent PM cannot be immediately recruited, an interim PM must be formally designated with clear responsibilities.", type: "People/Process" },
-    { category: "Introduction of PMS", step: "Expand Detailed Timeline with Priority Categorization", challenge: "PMs create timelines from scratch, wasting time. Unachievable milestones are set when projects are already delayed. Lack of prioritization leads to narrow deadlines for PMs while submitted reports remain unreviewed.", solution: "Develop and enforce the use of standardized Gantt chart templates. Conduct thorough feasibility assessments for all milestones. Implement a clear prioritization framework and establish formal review processes with SLAs.", type: "Process" },
-    { category: "Introduction of PMS", step: "Introduction & Orientation to PMS", challenge: "PMS orientation is limited to select teams or only PMs. Lack of accessible documentation leads to repetitive queries and difficulties for mid-project joiners.", solution: "Mandate comprehensive PMS orientation for all project stakeholders. Ensure all training sessions are recorded and develop comprehensive user manuals and FAQs within the PMS.", type: "Process/People" },
-    { category: "Introduction of PMS", step: "Initiate PMS and Conduct Weekly System Reviews", challenge: "Multiple document versions cause confusion and errors. Locating or accessing files is challenging, especially during handovers. No system ensures timely uploading of all files, leading to incomplete documentation.", solution: "Implement strict version control protocols and standardized file naming. Establish a well-organized, searchable shared document repository. Delegate document management responsibilities to a 'document holder' within the team.", type: "Process/Technology" },
-    { category: "Detailed Budget Adaptation", step: "Categorize Budget into 'Negotiable' and 'Locked Zones", challenge: "Project budgets overlook contingencies for delays. Staffing budgets do not reflect ground realities, forcing PMs to operate with inadequate personnel.", solution: "Collaborate with finance and leadership to develop an adaptive budget with contingency allocations. Regularly review and adjust staffing budgets to reflect actual project needs.", type: "Process" },
-    { category: "Detailed Budget Adaptation", step: "Plan for excess or exhausted budget", challenge: "PMs are often unaware of the submitted budget. PMs’ suggestions for cost optimization are overlooked. Lack of transparency between PMs and finance on budget utilization.", solution: "Fully inform and involve PMs in the budget process. Empower PMs with a framework for budget flexibility. Establish a transparent communication protocol with the finance department, including regular review meetings.", type: "People/Process" },
-    { category: "Detailed Budget Adaptation", step: "Utilise a budgeting software", challenge: "Lack of an integrated budgeting and reimbursement system limits real-time visibility on fund utilization, causing delays and making tracking difficult.", solution: "Advocate for and implement an integrated budgeting and reimbursement software linked to the PMS for real-time tracking and streamlined reimbursements.", type: "Technology/Process" },
-    { category: "Team Recruitment Process", step: "Screening and hiring process", challenge: "PMs are overloaded with JD preparation, CV screening, and interviewing, leading to extreme delays in hiring and onboarding.", solution: "Collaborate with HR to streamline the recruitment process. Core HR functions should be managed by HR, with clear SLAs for hiring timelines.", type: "People/Process" },
-    { category: "Team Recruitment Process", step: "Interview & Selection process", challenge: "Required team members are not hired even after the project has started. Vacancies as per budget remain unfilled until the project's conclusion. Staffing levels are inconsistent across studies.", solution: "Implement a proactive staffing plan to ensure all members are hired before project commencement. Implement a standardized resource allocation model across all projects.", type: "People/Process" },
-    { category: "Team Recruitment Process", step: "On-boarding process", challenge: "PMs manually screen CVs in Excel. Final round interviews are frequently delayed due to other priorities.", solution: "Advocate for AI-powered recruitment tools for initial screening. Prioritize final round interviews as critical path activities and communicate urgency to leadership.", type: "Process/Technology" },
-    { category: "Team Recruitment Process", step: "Conduct a meeting for PMs to discuss with team members about the roles and responsibilities", challenge: "Individuals are recruited without adequate knowledge of their position or training. Lack of a standardized onboarding mechanism leads to delays and potential attrition.", solution: "Implement a rigorous pre-employment assessment and a comprehensive onboarding program with detailed job descriptions, clear expectations, and a RACI matrix.", type: "People/Process" },
-    { category: "Protocol, Tools & ICF Development", step: "Comprehensive literature review for protocol/tool modification", challenge: "Protocol and tool development is often initiated too late. The entire protocol is drafted by a single individual, lacking peer review, leading to frequent post-submission changes and IEC amendments.", solution: "Integrate protocol development into early project planning. Implement a collaborative drafting process with mandated peer reviews at various stages.", type: "Process" },
-    { category: "Protocol, Tools & ICF Development", step: "Development & Expansion, Modifications", challenge: "Lack of organizational AI subscriptions results in generalized documents. Reviewing documents independently instead of on collaborative platforms causes feedback tracking issues. Review meetings are irregular and reactive.", solution: "Advocate for AI tool subscriptions. Mandate the use of collaborative document editing platforms. Establish a regular schedule for proactive review meetings with structured agendas.", type: "Process/Technology" },
-    { category: "Protocol, Tools & ICF Development", step: "Finalisation of draft & Approval for IEC Submission", challenge: "Subject matter experts are often unavailable or not identified in time. Inputs from Site PIs/technical experts are taken at the last stage. Junior members often lack guidance.", solution: "Proactively identify and secure SME commitment early. Organize co-development workshops with PIs and experts. Implement a formal mentorship program for junior members.", type: "People" },
-    { category: "Protocol, Tools & ICF Development", step: "Site directory formation", challenge: "Standardized templates are not maintained organization-wide. Tasks are assigned without defined ownership or follow-up mechanisms.", solution: "Champion the development of a central library of standardized templates. For every task, clearly define ownership and establish a follow-up mechanism.", type: "Process" },
-    { category: "Formation of Expert Committees", step: "DSMB. TAG & Steering Committee Formation (For RCTs)", challenge: "Delayed identification and onboarding of committee members (DSMB, TAG) leads to delays in resolving critical events. Enrollment sometimes starts before the committee is even finalized.", solution: "Proactively identify and onboard expert committee members during the conceptualization phase. Maintain an updated organizational roster of potential experts to draw from.", type: "People/Process" },
-    { category: "Formation of Expert Committees", step: "Study Task Force (Internal & External)", challenge: "Roles and responsibilities for committee members are not clearly outlined. Timelines are frequently missed by members, and reviews do not occur within stipulated windows.", solution: "Develop and disseminate standardized guidelines outlining roles, responsibilities, and expected deliverables for all committee members. Establish and enforce strict timelines for reviews.", type: "Process" },
-    { category: "Site Selection", step: "Facility Assessment & final site list generation", challenge: "Site selection is often finalized arbitrarily without proper feasibility assessment, leading to wasted time and delays. Site assessments are unstructured and inconsistent.", solution: "Implement a rigorous, data-driven site feasibility assessment process before final selection. Standardize the site evaluation process across all sites with consistent guidance.", type: "Process" },
-    { category: "Site Selection", step: "Communication with potential collaborators & stakeholders", challenge: "A concise organizational one-pager is not available for external partners. There is no database of already partnered sites, necessitating re-doing feasibility assessments.", solution: "Ensure a concise, up-to-date organizational one-pager is accessible. Advocate for and utilize an organizational data bank for partnered sites with structured feasibility data.", type: "Technology/Process" },
-    { category: "Approvals & Compliance", step: "IEC approvals", challenge: "Protocols and instruments aren't approved until the last minute before filing. Time-consuming printing and filing are also done at the last minute. CVs of key team members are not centrally stored or updated.", solution: "Establish strict internal review schedules well in advance of deadlines. Allocate administrative support for printing/filing. Establish a central repository for updated CVs.", type: "Process" },
-    { category: "Approvals & Compliance", step: "MoUs signed with participating sites", challenge: "Queries are answered by senior members due to insufficient time for junior members. Fee payments are delayed. PMs prepare MoUs that face review delays. Required regulatory approvals are identified late.", solution: "Implement a capacity-building program for junior members. Streamline payment mechanisms. Use standardized MoU templates with clear review timelines. Conduct a comprehensive regulatory landscape analysis at the project's outset.", type: "People/Process" },
-    { category: "Pre-Implementation Setup", step: "CRFs and PISs review and finalization", challenge: "Tools are finalized in silos without comprehensive input. PMs cannot find reference materials as shared portals are not maintained. Delays in timely reviews and decision-making for CRFs and PISs.", solution: "Mandate a collaborative tool finalization process with all stakeholders. Enforce a policy for all PMs to maintain a shared documentation portal. Organize 'workathon' meetings for real-time consensus.", type: "Process" },
-    { category: "Pre-Implementation Setup", step: "Tools REDCap configured and tested", challenge: "Proper SOPs are not available at the study's beginning. The entire responsibility of drafting SOPs falls on PMs, who may lack subject expertise. Pilot test learnings are not effectively integrated.", solution: "Prioritize SOP development, co-developing them with subject experts. Champion a central expert team to create common SOPs. Rigorously integrate pilot learnings into the main study protocol.", type: "People/Process" },
-    { category: "Training & Field Readiness", step: "Staff Training sessions", challenge: "Subject matter experts are not identified or made available in time. PMs are left to create training agendas alone, which may lack depth. PMs lead training sessions alone due to expert unavailability.", solution: "Proactively identify and secure SME commitment for training. Mandate leadership review and co-development of training materials. Ensure SMEs are available to co-lead sessions.", type: "People" },
-    { category: "Training & Field Readiness", step: "Team standardisation", challenge: "New PMs struggle to anticipate logistical needs due to no standard formats. Admin/Finance teams depend on PMs for exhaustive input without guidance. Admin arrangements are reactive and uncoordinated.", solution: "Develop standardized formats for logistical planning. Establish clear guidelines for Admin/Finance input. Establish a proactive administrative support plan for all training logistics.", type: "Process" },
-    { category: "Quality Assurance Protocol & Execution", step: "Development of SOP/ Protocol for QA", challenge: "Subject experts are often occupied, limiting their contribution to QA. Each team operates based on individual past experiences, leading to inconsistent practices.", solution: "Proactively schedule and secure dedicated time from subject experts for QA activities. Develop and enforce organization-wide standardized QA protocols and templates.", type: "People/Process" },
-    { category: "Implementation & Monitoring", step: "Site preparedness(Construction), Equipment and logistics procured", challenge: "Inadequate sitting arrangements and lack of space at sites. Recruitment is not done even after implementation has started. No fixed senior member is appointed for guidance.", solution: "Conduct a detailed site readiness assessment before implementation. Ensure all personnel are hired and deployed before implementation begins. Advocate for a dedicated senior point person for guidance.", type: "Process" },
-    { category: "Implementation & Monitoring", step: "Participant Recruitment", challenge: "Meetings are not held before recruitment begins. Clear intervention delivery protocols are not prepared or shared. Timely inputs from senior members for co-design workshops are often missing.", solution: "Mandate a pre-recruitment kick-off meeting. Ensure clear, written intervention protocols are disseminated before implementation. Establish a formal feedback loop with clear deadlines for senior team inputs.", type: "People/Process" },
-    { category: "Data Collection, Management & Analysis", step: "Data Collection", challenge: "Conflict between organizational goals and protocol objectives creates confusion. Qualitative research is siloed with no cross-learning opportunities.", solution: "Facilitate a clear definition of the project's scope and objectives. Organize cross-project brainstorming meetings and knowledge-sharing sessions for qualitative researchers.", type: "Process/People" },
-    { category: "Data Collection, Management & Analysis", step: "Data Analysis, Management & Sharing Plan formation", challenge: "PMs without prior qualitative experience are expected to manage these tasks. Lack of confidence and guidance among young freshers with no mechanism for skill-building.", solution: "Ensure PMs assigned to qualitative tasks receive adequate training and mentorship. Establish a formal mentorship program for young researchers with a repository of self-learning materials.", type: "People" },
-    { category: "Dissemination & Publication", step: "Internal dissemination to study team", challenge: "A 'plurality of instructions and guidance' makes execution difficult. Manuscript drafts remain in review for up to 6 months, leading to a lack of motivation.", solution: "Establish a single, clear source of guidance for manuscript writing. Establish strict review timelines (e.g., 2-4 weeks) with a formal process and accountability.", type: "Process/People" },
-    { category: "Dissemination & Publication", step: "Stakeholder dissemination", challenge: "Stakeholder dissemination meetings are frequently last-minute and unplanned. Only project-specific staff are involved in manuscript contribution, limiting broader scientific input.", solution: "Develop a well-strategized plan for all stakeholder dissemination meetings. Encourage broader scientific contribution by involving relevant staff from other projects.", type: "Process" },
-    { category: "Scale-Up Planning", step: "Scalability assessment", challenge: "Scale-up targets are set without a priori planning or data-driven information. There is no internal planning for HR requirements for scale-up sites, leading to dependency on single individuals and delays.", solution: "Ensure scale-up targets are based on rigorous, data-driven analysis and a scalability assessment. Develop a detailed HR planning component for scale-up, including recruitment and training needs.", type: "Process" },
-    { category: "Scale-Up Planning", step: "Consultations with health system / govt", challenge: "Stakeholder mapping and liaisoning with the health system often occur too late, delaying government official onboarding for MoUs and co-designing for scale.", solution: "Initiate stakeholder mapping and liaisoning well in advance of scale-up planning. Proactive engagement with government officials is crucial for securing necessary agreements.", type: "People/Process" }
+    { category: "Conceptualization & Planning", step: "Formation of Interim Project Core Research Team (CRT)", challenge: "No designated research team exists, leading to a lack of accountability. Excessive workload falls on a single individual. Designated members do not work on the project, burdening others. Different responsibilities are handled by different people, preventing a comprehensive study understanding. Lack of clarity on team composition from the start.", solution: "Establish a dedicated Project Core Research Team (CRT) at project inception, clearly defining roles, responsibilities, and reporting lines for each member, including a senior researcher for oversight. Implement a RACI matrix to ensure accountability and prevent diffused responsibilities.", type: "People/Process", ownership: "Research Management, Project Manager" },
+    { category: "Conceptualization & Planning", step: "Initial presentation summarising the Concept Proposal", challenge: "Many core members don't have access to key documents before meetings. Members joining mid-project lack orientation. Extensive deviation from the approved research proposal occurs. Terminologies and objectives are open to individual interpretation.", solution: "Implement a centralized document management system to ensure all core members have access to key documents. Develop and implement a standardized onboarding program for new team members. Establish a strict change control process for any deviation from the approved proposal to maintain project focus and clarity.", type: "Process/People", ownership: "Research Operations, Project Manager" },
+    { category: "Conceptualization & Planning", step: "Initial Kick-off and Planning/Conceptualisation Meeting", challenge: "A study's focus is diluted by trying to test too many innovations. The initial kick-off meeting either doesn't happen or lacks structured planning. Persistent misalignment between organizational vision and project deliverables.", solution: "Define a clear project scope and prioritize objectives using a scope management plan. Mandate a formal project kick-off meeting with a predefined agenda and actionable conclusions. Ensure continuous alignment through regular reviews with senior leadership and a robust communication plan.", type: "Process", ownership: "Project Manager, Senior Leadership" },
+    { category: "Conceptualization & Planning", step: "Detailed budget adaptation and circulation with key members", challenge: "Young team members experience confusion and lack of clarity. There is no mechanism for constructive, tangible feedback to refine plans.", solution: "Implement a structured mentorship program for junior team members to clarify roles and responsibilities. Establish a formal feedback mechanism for all project deliverables, facilitating structured review sessions for plan refinement.", type: "People", ownership: "HR, Research Management" },
+    { category: "Introduction of PMS", step: "Assign an Interim/ Permanent Project Manager (PM)", challenge: "Not recruiting or dedicating a project manager at the start of the study causes delays and complicates streamlining efforts later.", solution: "Implement a policy for mandatory Project Manager (PM) assignment at the project's initiation to ensure immediate leadership and accountability. If a permanent PM cannot be immediately recruited, an interim PM must be formally designated with clear responsibilities and a handover plan.", type: "People/Process", ownership: "Senior Leadership, HR" },
+    { category: "Introduction of PMS", step: "Expand Detailed Timeline with Priority Categorization", challenge: "PMs create timelines from scratch, wasting time. Unachievable milestones are set when projects are already delayed. Lack of prioritization leads to narrow deadlines for PMs while submitted reports remain unreviewed.", solution: "Develop and enforce the use of standardized Gantt chart templates for efficient timeline creation. Conduct thorough feasibility assessments for all milestones to ensure attainability. Implement a clear prioritization framework and establish formal review processes with Service Level Agreements (SLAs) for timely report review.", type: "Process", ownership: "Project Manager, Research Management" },
+    { category: "Introduction of PMS", step: "Introduction & Orientation to PMS", challenge: "PMS orientation is limited to select teams or only PMs. Lack of accessible documentation leads to repetitive queries and difficulties for mid-project joiners.", solution: "Mandate comprehensive Project Management System (PMS) orientation for all project stakeholders, not just PMs. Ensure all training sessions are recorded and develop comprehensive, accessible user manuals and FAQs within the PMS to reduce repetitive queries and facilitate onboarding.", type: "Process/People", ownership: "Research Operations, Technology, HR" },
+    { category: "Introduction of PMS", step: "Initiate PMS and Conduct Weekly System Reviews", challenge: "Multiple document versions cause confusion and errors. Locating or accessing files is challenging, especially during handovers. No system ensures timely uploading of all files, leading to incomplete documentation.", solution: "Implement strict version control protocols and standardized file naming conventions within the PMS. Establish a well-organized, searchable shared document repository. Delegate document management responsibilities to a 'document holder' within each team to ensure timely and complete documentation.", type: "Process/Technology", ownership: "Technology, Research Operations" },
+    { category: "Detailed Budget Adaptation", step: "Categorize Budget into 'Negotiable' and 'Locked Zones", challenge: "Project budgets overlook contingencies for delays. Staffing budgets do not reflect ground realities, forcing PMs to operate with inadequate personnel.", solution: "Collaborate with finance and leadership to develop an adaptive budget with contingency allocations to mitigate financial risks. Regularly review and adjust staffing budgets to reflect actual project needs and ensure adequate resource allocation.", type: "Process", ownership: "Finance, Project Manager, Senior Leadership" },
+    { category: "Detailed Budget Adaptation", step: "Plan for excess or exhausted budget", challenge: "PMs are often unaware of the submitted budget. PMs’ suggestions for cost optimization are overlooked. Lack of transparency between PMs and finance on budget utilization.", solution: "Fully inform and involve PMs in the budget planning process. Empower PMs with a framework for budget flexibility and clear guidelines for cost optimization suggestions. Establish a transparent communication protocol with the finance department, including regular budget review meetings, to ensure effective financial oversight.", type: "People/Process", ownership: "Project Manager, Finance" },
+    { category: "Detailed Budget Adaptation", step: "Utilise a budgeting software", challenge: "Lack of an integrated budgeting and reimbursement system limits real-time visibility on fund utilization, causing delays and making tracking difficult.", solution: "Advocate for and implement an integrated budgeting and reimbursement software linked to the PMS for real-time fund utilization tracking and streamlined reimbursements, enhancing financial control and efficiency.", type: "Technology/Process", ownership: "Technology, Finance" },
+    { category: "Team Recruitment Process", step: "Screening and hiring process", challenge: "PMs are overloaded with JD preparation, CV screening, and interviewing, leading to extreme delays in hiring and onboarding.", solution: "Collaborate with HR to streamline the recruitment process. Core HR functions (JD preparation, CV screening) should be managed by HR with clear Service Level Agreements (SLAs) for hiring timelines to reduce PM workload and accelerate talent acquisition.", type: "People/Process", ownership: "HR, Research Operations" },
+    { category: "Team Recruitment Process", step: "Interview & Selection process", challenge: "Required team members are not hired even after the project has started. Vacancies as per budget remain unfilled until the project's conclusion. Staffing levels are inconsistent across studies.", solution: "Implement a proactive staffing plan to ensure all required team members are hired and onboarded before project commencement. Implement a standardized resource allocation model across all projects to ensure consistent and adequate staffing levels.", type: "People/Process", ownership: "HR, Research Management" },
+    { category: "Team Recruitment Process", step: "On-boarding process", challenge: "PMs manually screen CVs in Excel. Final round interviews are frequently delayed due to other priorities.", solution: "Advocate for and integrate AI-powered recruitment tools for initial CV screening to improve efficiency. Prioritize final round interviews as critical path activities, communicating urgency to leadership to prevent hiring delays.", type: "Process/Technology", ownership: "HR, Technology, Senior Leadership" },
+    { category: "Team Recruitment Process", step: "Conduct a meeting for PMs to discuss with team members about the roles and responsibilities", challenge: "Individuals are recruited without adequate knowledge of their position or training. Lack of a standardized onboarding mechanism leads to delays and potential attrition.", solution: "Implement a rigorous pre-employment assessment and a comprehensive, standardized onboarding program. This program should include detailed job descriptions, clear expectations, and a RACI matrix to minimize confusion and reduce attrition.", type: "People/Process", ownership: "HR, Research Operations" },
+    { category: "Protocol, Tools & ICF Development", step: "Comprehensive literature review for protocol/tool modification", challenge: "Protocol and tool development is often initiated too late. The entire protocol is drafted by a single individual, lacking peer review, leading to frequent post-submission changes and IEC amendments.", solution: "Integrate protocol and tool development into early project planning to avoid delays. Implement a collaborative drafting process with mandated peer reviews at various stages to ensure quality and reduce post-submission changes and IEC amendments.", type: "Process", ownership: "Research, Project Manager" },
+    { category: "Protocol, Tools & ICF Development", step: "Development & Expansion, Modifications", challenge: "Lack of organizational AI subscriptions results in generalized documents. Reviewing documents independently instead of on collaborative platforms causes feedback tracking issues. Review meetings are irregular and reactive.", solution: "Advocate for organizational AI tool subscriptions to enhance document quality. Mandate the use of collaborative document editing platforms for streamlined feedback tracking. Establish a regular schedule for proactive review meetings with structured agendas to ensure timely and effective discussions.", type: "Process/Technology", ownership: "Technology, Research Operations, Project Manager" },
+    { category: "Protocol, Tools & ICF Development", step: "Finalisation of draft & Approval for IEC Submission", challenge: "Subject matter experts are often unavailable or not identified in time. Inputs from Site PIs/technical experts are taken at the last stage. Junior members often lack guidance.", solution: "Proactively identify and secure Subject Matter Expert (SME) commitment early in the planning phase. Organize co-development workshops with Principal Investigators (PIs) and technical experts. Implement a formal mentorship program for junior members to provide timely guidance and support.", type: "People", ownership: "Research, Research Management, Program Impact & Community Partnership" },
+    { category: "Protocol, Tools & ICF Development", step: "Site directory formation", challenge: "Standardized templates are not maintained organization-wide. Tasks are assigned without defined ownership or follow-up mechanisms.", solution: "Champion the development of a central library of standardized templates for consistency. For every task, clearly define ownership and establish a follow-up mechanism within the project management system to ensure accountability and progress tracking.", type: "Process", ownership: "Research Operations, Project Manager" },
+    { category: "Formation of Expert Committees", step: "DSMB. TAG & Steering Committee Formation (For RCTs)", challenge: "Delayed identification and onboarding of committee members (DSMB, TAG) leads to delays in resolving critical events. Enrollment sometimes starts before the committee is even finalized.", solution: "Proactively identify and onboard expert committee members (DSMB, TAG) during the conceptualization phase to prevent project delays. Maintain an updated organizational roster of potential experts to facilitate rapid committee formation and ensure timely oversight for critical events.", type: "People/Process", ownership: "Research, Senior Leadership, Research Management" },
+    { category: "Formation of Expert Committees", step: "Study Task Force (Internal & External)", challenge: "Roles and responsibilities for committee members are not clearly outlined. Timelines are frequently missed by members, and reviews do not occur within stipulated windows.", solution: "Develop and disseminate standardized guidelines outlining clear roles, responsibilities, and expected deliverables for all committee members. Establish and enforce strict timelines for reviews and implement a tracking mechanism to ensure compliance.", type: "Process", ownership: "Research Management, Project Manager" },
+    { category: "Site Selection", step: "Facility Assessment & final site list generation", challenge: "Site selection is often finalized arbitrarily without proper feasibility assessment, leading to wasted time and delays. Site assessments are unstructured and inconsistent.", solution: "Implement a rigorous, data-driven site feasibility assessment process before final selection to optimize resource allocation and prevent delays. Standardize the site evaluation process across all sites with consistent guidance and criteria for objective assessment.", type: "Process", ownership: "Research Operations, Research Management" },
+    { category: "Site Selection", step: "Communication with potential collaborators & stakeholders", challenge: "A concise organizational one-pager is not available for external partners. There is no database of already partnered sites, necessitating re-doing feasibility assessments.", solution: "Ensure a concise, up-to-date organizational one-pager is readily available for external partners to streamline initial communications. Advocate for and utilize an organizational data bank for partnered sites, including structured feasibility data, to avoid redundant assessments.", type: "Technology/Process", ownership: "Program Impact & Community Partnership, Research Operations, Technology" },
+    { category: "Approvals & Compliance", step: "IEC approvals", challenge: "Protocols and instruments aren't approved until the last minute before filing. Time-consuming printing and filing are also done at the last minute. CVs of key team members are not centrally stored or updated.", solution: "Establish strict internal review schedules well in advance of submission deadlines for protocols and instruments. Allocate dedicated administrative support for printing and filing. Establish a central, routinely updated repository for CVs of key team members to ensure compliance readiness.", type: "Process", ownership: "Administration, Research Operations" },
+    { category: "Approvals & Compliance", step: "MoUs signed with participating sites", challenge: "Queries are answered by senior members due to insufficient time for junior members. Fee payments are delayed. PMs prepare MoUs that face review delays. Required regulatory approvals are identified late.", solution: "Implement a capacity-building program for junior members to handle queries efficiently. Streamline payment mechanisms to avoid delays. Utilize standardized MoU templates with clear review timelines. Conduct a comprehensive regulatory landscape analysis at the project's outset to identify all required approvals early.", type: "People/Process", ownership: "HR, Finance, Research Operations, Project Manager" },
+    { category: "Pre-Implementation Setup", step: "CRFs and PISs review and finalization", challenge: "Tools are finalized in silos without comprehensive input. PMs cannot find reference materials as shared portals are not maintained. Delays in timely reviews and decision-making for CRFs and PISs.", solution: "Mandate a collaborative tool finalization process involving all stakeholders to ensure comprehensive input. Enforce a policy for all PMs to maintain a shared documentation portal for easy access to reference materials. Organize 'workathon' meetings for real-time consensus and accelerate reviews and decision-making.", type: "Process", ownership: "Project Manager, Technology, Research Operations" },
+    { category: "Pre-Implementation Setup", step: "Tools REDCap configured and tested", challenge: "Proper SOPs are not available at the study's beginning. The entire responsibility of drafting SOPs falls on PMs, who may lack subject expertise. Pilot test learnings are not effectively integrated.", solution: "Prioritize SOP development early in the study, co-developing them with subject experts to ensure accuracy and completeness. Champion a central expert team to create common SOPs for organizational consistency. Rigorously integrate pilot test learnings into the main study protocol to refine processes before full implementation.", type: "People/Process", ownership: "Research Operations, Research Management, Project Manager" },
+    { category: "Training & Field Readiness", step: "Staff Training sessions", challenge: "Subject matter experts are not identified or made available in time. PMs are left to create training agendas alone, which may lack depth. PMs lead training sessions alone due to expert unavailability.", solution: "Proactively identify and secure Subject Matter Expert (SME) commitment for training sessions. Mandate leadership review and co-development of training materials to ensure depth and relevance. Ensure SMEs are available to co-lead sessions, leveraging their expertise effectively.", type: "People", ownership: "HR, Research Management, Program Impact & Community Partnership" },
+    { category: "Training & Field Readiness", step: "Team standardisation", challenge: "New PMs struggle to anticipate logistical needs due to no standard formats. Admin/Finance teams depend on PMs for exhaustive input without guidance. Admin arrangements are reactive and uncoordinated.", solution: "Develop standardized formats and checklists for logistical planning to support new PMs. Establish clear guidelines and templates for Admin/Finance input requirements. Implement a proactive administrative support plan for all training logistics to ensure coordinated and efficient arrangements.", type: "Process", ownership: "Administration, Project Manager, Finance" },
+    { category: "Quality Assurance Protocol & Execution", step: "Development of SOP/ Protocol for QA", challenge: "Subject experts are often occupied, limiting their contribution to QA. Each team operates based on individual past experiences, leading to inconsistent practices.", solution: "Proactively schedule and secure dedicated time from subject experts for Quality Assurance (QA) activities. Develop and enforce organization-wide standardized QA protocols and templates to ensure consistent and high-quality practices across all teams.", type: "People/Process", ownership: "Research Management, Project Manager" },
+    { category: "Implementation & Monitoring", step: "Site preparedness(Construction), Equipment and logistics procured", challenge: "Inadequate sitting arrangements and lack of space at sites. Recruitment is not done even after implementation has started. No fixed senior member is appointed for guidance.", solution: "Conduct a detailed site readiness assessment, including infrastructure and space, before implementation. Ensure all personnel are hired and deployed before implementation begins. Advocate for a dedicated senior point person for guidance and issue resolution at each site.", type: "Process", ownership: "Research Operations, HR, Project Manager" },
+    { category: "Implementation & Monitoring", step: "Participant Recruitment", challenge: "Meetings are not held before recruitment begins. Clear intervention delivery protocols are not prepared or shared. Timely inputs from senior members for co-design workshops are often missing.", solution: "Mandate a pre-recruitment kick-off meeting to align all stakeholders. Ensure clear, written intervention protocols are disseminated before implementation. Establish a formal feedback loop with clear deadlines for senior team inputs for co-design workshops, ensuring timely strategic guidance.", type: "People/Process", ownership: "Project Manager, Research, Research Operations" },
+    { category: "Data Collection, Management & Analysis", step: "Data Collection", challenge: "Conflict between organizational goals and protocol objectives creates confusion. Qualitative research is siloed with no cross-learning opportunities.", solution: "Facilitate a clear definition of the project's scope and objectives to resolve internal conflicts and ensure alignment. Organize cross-project brainstorming meetings and knowledge-sharing sessions for qualitative researchers to foster collaboration and cross-learning opportunities.", type: "Process/People", ownership: "Project Manager, Research, Research Operations" },
+    { category: "Data Collection, Management & Analysis", step: "Data Analysis, Management & Sharing Plan formation", challenge: "PMs without prior qualitative experience are expected to manage these tasks. Lack of confidence and guidance among young freshers with no mechanism for skill-building.", solution: "Ensure PMs assigned to qualitative data tasks receive adequate training and mentorship in qualitative methodologies. Establish a formal mentorship program for young researchers, complemented by a repository of self-learning materials, to build confidence and skills.", type: "People", ownership: "Research Management, HR, Project Manager" },
+    { category: "Dissemination & Publication", step: "Internal dissemination to study team", challenge: "A 'plurality of instructions and guidance' makes execution difficult. Manuscript drafts remain in review for up to 6 months, leading to a lack of motivation.", solution: "Establish a single, clear source of guidance and standard operating procedures for manuscript writing. Implement strict review timelines (e.g., 2-4 weeks) with a formal process and accountability to prevent prolonged delays and maintain team motivation.", type: "Process/People", ownership: "Research Management, Project Manager" },
+    { category: "Dissemination & Publication", step: "Stakeholder dissemination", challenge: "Stakeholder dissemination meetings are frequently last-minute and unplanned. Only project-specific staff are involved in manuscript contribution, limiting broader scientific input.", solution: "Develop a well-strategized, proactive plan for all stakeholder dissemination meetings, including clear objectives and timelines. Encourage broader scientific contribution by involving relevant staff from other projects in manuscript development, enhancing the quality and reach of publications.", type: "Process", ownership: "Program Impact & Community Partnership, Research Management, Project Manager" },
+    { category: "Scale-Up Planning", step: "Scalability assessment", challenge: "Scale-up targets are set without a priori planning or data-driven information. There is no internal planning for HR requirements for scale-up sites, leading to dependency on single individuals and delays.", solution: "Ensure scale-up targets are based on rigorous, data-driven analysis and a comprehensive scalability assessment. Develop a detailed HR planning component for scale-up, including proactive recruitment and training needs, to avoid single points of failure and prevent delays.", type: "Process", ownership: "Senior Leadership, Research Operations, HR, Project Manager" },
+    { category: "Scale-Up Planning", step: "Consultations with health system / govt", challenge: "Stakeholder mapping and liaisoning with the health system often occur too late, delaying government official onboarding for MoUs and co-designing for scale.", solution: "Initiate stakeholder mapping and liaisoning with the health system and government well in advance of scale-up planning. Proactive engagement with government officials is crucial for securing necessary Memoranda of Understanding (MoUs) and facilitating co-design workshops for successful scale-up.", type: "People/Process", ownership: "Program Impact & Community Partnership, Senior Leadership, Project Manager" }
 ];
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -217,7 +227,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function renderContent() {
-        // Destroy existing chart if any
+        // Destroy existing chart instances
         for (const chartId in charts) {
             if (charts[chartId]) {
                 charts[chartId].destroy();
@@ -226,6 +236,31 @@ document.addEventListener('DOMContentLoaded', () => {
         charts = {}; // Clear the charts object
 
         if (currentTableType) { // If a detailed table is being displayed
+            contentContainer.innerHTML = `
+                <div class="fade-in">
+                    <button id="back-button-table" class="mb-4 px-6 py-2 bg-[#6d4c41] text-white rounded-lg shadow hover:bg-[#5d4037] transition">← Back</button>
+                    <h2 class="text-3xl font-bold text-[#6d4c41] mb-2">Detailed Challenges: ${currentTableTitle}</h2>
+                    <p class="text-lg text-[#8d6e63] mb-8">Below is a comprehensive list of all challenges ${currentTableType === 'type' ? `of type '${currentTableTitle}' across all phases` : currentTableType === 'phase' ? `identified within the '${currentTableTitle}' phase` : `of type '${currentTableTitle.split(' - ')[1]}' within the '${currentTableTitle.split(' - ')[0]}' phase`}, with each specific challenge statement presented on its own row, along with their respective project phases, operational steps, proposed solutions, and ownership status. This granular view helps in understanding individual pain points more clearly.</p>
+                    <div class="bg-white p-6 rounded-2xl shadow-lg border border-gray-200 overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-200 detailed-table">
+                            <thead class="bg-[#f8f7f4]">
+                                <tr>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-[#5d4037] uppercase tracking-wider rounded-tl-lg w-phase">Project Phase</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-[#5d4037] uppercase tracking-wider w-step">Operational Step</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-[#5d4037] uppercase tracking-wider w-challenge">Challenge</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-[#5d4037] uppercase tracking-wider w-solution">Solution</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-[#5d4037] uppercase tracking-wider rounded-tr-lg w-ownership">Ownership</th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200">
+                                <!-- Table rows will be inserted by renderDetailedTable -->
+                            </tbody>
+                        </table>
+                    </div>
+                    <button id="back-button-table-bottom" class="mt-8 px-6 py-2 bg-[#6d4c41] text-white rounded-lg shadow hover:bg-[#5d4037] transition">← Back</button>
+                </div>
+            `;
+            // Call renderDetailedTable after content is injected
             renderDetailedTable(currentTableTitle, currentTableData, currentTableType);
         } else if (activePhase === 'Dashboard') {
             contentContainer.innerHTML = `
@@ -233,11 +268,11 @@ document.addEventListener('DOMContentLoaded', () => {
                     <h2 class="text-3xl font-bold text-[#6d4c41] mb-2">Project Execution Dashboard</h2>
                     <p class="text-lg text-[#8d6e63] mb-8">An overview of challenges across the entire project lifecycle. Click on a bar to see a detailed list of challenges for that category or phase.</p>
 
-                    <div class="grid grid-cols-1 gap-8 mb-8"> <!-- Changed from md:grid-cols-2 to grid-cols-1 -->
+                    <div class="grid grid-cols-1 gap-8 mb-8">
                         <div class="bg-white p-6 rounded-2xl shadow-lg border border-gray-200">
                             <h3 class="text-xl font-semibold mb-4 text-[#5d4037]">Challenge Distribution by Type</h3>
-                            <p class="text-sm text-gray-600 mb-6">This chart summarizes all identified challenges, categorized into People, Process, and Technology domains. It provides a high-level view of where systemic issues are most prevalent.</p>
-                            <div class="chart-container h-96">
+                            <p class="text-sm text-gray-600 mb-6">This chart summarizes all individual challenge statements, categorized into People, Process, and Technology domains. It provides a granular view of where systemic issues are most prevalent.</p>
+                            <div class="chart-container h-96" id="chart-container-dashboard-type">
                                 <canvas id="dashboard-chart-type"></canvas>
                             </div>
                         </div>
@@ -245,13 +280,14 @@ document.addEventListener('DOMContentLoaded', () => {
                             <h3 class="text-xl font-semibold mb-4 text-[#5d4037]">Challenges by Project Phase</h3>
                             <p class="text-sm text-gray-600 mb-6">This chart shows the total count of individual challenge statements identified within each project phase, providing insights into which stages face the most hurdles.</p>
                             <p class="text-xs text-gray-500 mt-2">Note: Different shades of green are used for visual distinction between phases and do not indicate specific data values or intensity.</p>
-                            <div class="chart-container h-96">
+                            <div class="chart-container h-96" id="chart-container-dashboard-phase">
                                 <canvas id="dashboard-chart-phase"></canvas>
                             </div>
                         </div>
                     </div>
                 </div>
             `;
+            // Call chart rendering functions AFTER content is injected
             renderDashboardChartType();
             renderChallengesByPhaseChart();
             window.scrollTo(0, 0); // Scroll to top when rendering dashboard
@@ -279,7 +315,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         <div class="lg:col-span-1 bg-white p-6 rounded-2xl shadow-lg border border-gray-200">
                              <h3 class="text-xl font-semibold mb-4 text-[#5d4037]">Challenges in this Phase</h3>
                              <p class="text-sm text-gray-600 mb-6">This chart shows the breakdown of challenges specific to the ${activePhase} phase. Click on a segment to view details of that challenge type within this phase.</p>
-                            <div class="chart-container h-64 md:h-72">
+                            <div class="chart-container h-64 md:h-72" id="chart-container-phase-${activePhase.replace(/\s/g, '')}">
                                 <canvas id="phase-chart-${activePhase.replace(/\s/g, '')}"></canvas>
                             </div>
                         </div>
@@ -291,6 +327,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     </div>
                 </div>
             `;
+            // Call chart rendering functions AFTER content is injected
             renderPhaseChart(challengeCounts, activePhase); // Pass activePhase to chart renderer
             renderAccordion(phaseData);
             document.getElementById('home-button').addEventListener('click', handleGoHome); // Add event listener for the new home button
@@ -491,24 +528,53 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     function renderDashboardChartType() {
-        const allChallenges = projectData.reduce((acc, item) => {
-            const type = getChallengeType(item.type);
-            acc[type] = (acc[type] || 0) + 1;
-            return acc;
-        }, {});
-        
-        const labels = Object.keys(allChallenges);
+        const allChallengesByType = {}; // This will store the count of individual challenge statements by type
+
+        projectData.forEach(item => {
+            // Split the challenge string into individual sentences/statements
+            const challengesArray = item.challenge.split(/\.\s*(?=[A-Z])/).filter(s => s.trim() !== '');
+            const itemType = getChallengeType(item.type); // Get the overall type for the item
+
+            challengesArray.forEach(singleChallenge => {
+                // For each individual statement, we'll associate it with the item's main type.
+                // If a single challenge statement *itself* could have multiple types,
+                // this logic would need to be more complex (e.g., using an LLM to classify each sentence).
+                // For now, we'll assume the item's type applies to its constituent challenge statements.
+                allChallengesByType[itemType] = (allChallengesByType[itemType] || 0) + 1;
+            });
+        });
+
+        const labels = Object.keys(allChallengesByType);
         const backgroundColors = labels.map(label => challengeTypeColors[label] ? challengeTypeColors[label].background : challengeTypeColors['Mixed'].background);
         const borderColors = labels.map(label => challengeTypeColors[label] ? challengeTypeColors[label].border : challengeTypeColors['Mixed'].border);
 
-        const ctx = document.getElementById('dashboard-chart-type').getContext('2d');
-        charts['dashboard-chart-type'] = new Chart(ctx, {
+        const canvasId = 'dashboard-chart-type';
+        const chartContainer = document.getElementById('chart-container-dashboard-type');
+        
+        // Remove old canvas element from DOM if it exists within the container
+        let oldCanvas = document.getElementById(canvasId);
+        if (oldCanvas) {
+            oldCanvas.remove();
+        }
+
+        // Create a new canvas element and append it to the container
+        const newCanvas = document.createElement('canvas');
+        newCanvas.id = canvasId;
+        chartContainer.appendChild(newCanvas);
+        const ctxType = newCanvas.getContext('2d');
+
+        // Destroy existing chart instance if it exists (safety net, should be handled by clearing charts object)
+        if (charts[canvasId]) {
+            charts[canvasId].destroy();
+        }
+
+        charts[canvasId] = new Chart(ctxType, {
             type: 'bar',
             data: {
                 labels: labels,
                 datasets: [{
-                    label: 'Number of Challenges', // This label won't be displayed in the legend
-                    data: Object.values(allChallenges),
+                    label: 'Number of Individual Challenge Statements',
+                    data: Object.values(allChallengesByType),
                     backgroundColor: backgroundColors,
                     borderColor: borderColors,
                     borderWidth: 1,
@@ -517,7 +583,7 @@ document.addEventListener('DOMContentLoaded', () => {
             },
             options: {
                 ...chartConfig,
-                indexAxis: 'y', // Horizontal bar chart
+                indexAxis: 'y',
                 scales: {
                     x: { beginAtZero: true, grid: { color: '#e0e0e0' } },
                     y: { grid: { display: false } }
@@ -525,16 +591,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 plugins: {
                     ...chartConfig.plugins,
                     legend: {
-                        display: false // Hide legend for this bar chart
+                        display: false
                     }
                 },
                 onClick: (event, elements) => {
                     if (elements.length > 0) {
                         const clickedElementIndex = elements[0].index;
-                        const label = charts['dashboard-chart-type'].data.labels[clickedElementIndex];
+                        const label = charts[canvasId].data.labels[clickedElementIndex];
                         currentTableTitle = label;
                         currentTableData = projectData.filter(item => getChallengeType(item.type) === label);
-                        currentTableType = 'type'; // Indicates filtering by overall challenge type
+                        currentTableType = 'type';
                         renderContent();
                     }
                 }
@@ -550,13 +616,32 @@ document.addEventListener('DOMContentLoaded', () => {
             return acc;
         }, {});
 
-        const ctx = document.getElementById('dashboard-chart-phase').getContext('2d');
-        charts['dashboard-chart-phase'] = new Chart(ctx, {
+        const canvasId = 'dashboard-chart-phase';
+        const chartContainer = document.getElementById('chart-container-dashboard-phase');
+
+        // Remove old canvas element from DOM if it exists within the container
+        let oldCanvas = document.getElementById(canvasId);
+        if (oldCanvas) {
+            oldCanvas.remove();
+        }
+
+        // Create a new canvas element and append it to the container
+        const newCanvas = document.createElement('canvas');
+        newCanvas.id = canvasId;
+        chartContainer.appendChild(newCanvas);
+        const ctxPhase = newCanvas.getContext('2d');
+
+        // Destroy existing chart instance if it exists (safety net)
+        if (charts[canvasId]) {
+            charts[canvasId].destroy();
+        }
+
+        charts[canvasId] = new Chart(ctxPhase, {
             type: 'bar',
             data: {
                 labels: Object.keys(challengesByPhaseDetailedCount),
                 datasets: [{
-                    label: 'Total Individual Challenges', // This label won't be displayed in the legend
+                    label: 'Total Individual Challenges',
                     data: Object.values(challengesByPhaseDetailedCount),
                     backgroundColor: ['#a7d9b9', '#78c6a3', '#51af8a', '#2a9871', '#05825d', '#006c4a', '#00573e', '#004230', '#002e21', '#001a13', '#71b191', '#8fd9a9', '#5da589', '#3b8e6f', '#1c7857'], // More shades for distinction
                     borderColor: ['#2a9871', '#05825d', '#006c4a', '#00573e', '#004230', '#002e21', '#001a13', '#00100a', '#000805', '#000302', '#549c77', '#7abf95', '#498a6f', '#2f7457', '#125c3e'],
@@ -573,16 +658,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 plugins: {
                     ...chartConfig.plugins,
                     legend: {
-                        display: false // Hide legend for this bar chart
+                        display: false
                     }
                 },
                 onClick: (event, elements) => {
                     if (elements.length > 0) {
                         const clickedElementIndex = elements[0].index;
-                        const label = charts['dashboard-chart-phase'].data.labels[clickedElementIndex];
+                        const label = charts[canvasId].data.labels[clickedElementIndex];
                         currentTableTitle = label;
                         currentTableData = projectData.filter(item => item.category === label);
-                        currentTableType = 'phase'; // Indicates filtering by phase
+                        currentTableType = 'phase';
                         renderContent();
                     }
                 }
@@ -593,7 +678,25 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function renderPhaseChart(challengeCounts, phaseName) {
         const canvasId = `phase-chart-${phaseName.replace(/\s/g, '')}`;
-        const ctx = document.getElementById(canvasId).getContext('2d');
+        const chartContainer = document.getElementById(`chart-container-phase-${phaseName.replace(/\s/g, '')}`);
+
+        // Remove old canvas element from DOM if it exists within the container
+        let oldCanvas = document.getElementById(canvasId);
+        if (oldCanvas) {
+            oldCanvas.remove();
+        }
+
+        // Create a new canvas element and append it to the container
+        const newCanvas = document.createElement('canvas');
+        newCanvas.id = canvasId;
+        chartContainer.appendChild(newCanvas);
+        const ctx = newCanvas.getContext('2d');
+
+        // Destroy existing chart instance if it exists (safety net)
+        if (charts[phaseName]) { // Use phaseName as the key for these charts
+            charts[phaseName].destroy();
+        }
+
         const labels = Object.keys(challengeCounts);
 
         const backgroundColors = labels.map(label => challengeTypeColors[label] ? challengeTypeColors[label].background : challengeTypeColors['Mixed'].background);
@@ -636,44 +739,27 @@ document.addEventListener('DOMContentLoaded', () => {
             const challengesArray = item.challenge.split(/\.\s*(?=[A-Z])/).filter(s => s.trim() !== ''); // Split by period followed by a space and an uppercase letter, then filter empty strings
             
             challengesArray.forEach((singleChallenge) => {
+                // Split ownership by comma and join with ', ' for comma separation
+                const ownershipFormatted = item.ownership ? item.ownership.split(', ').join(', ') : '';
+
                 tableRowsHtml += `
                     <tr>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">${item.category}</td>
-                        <td class="px-6 py-4 whitespace-normal text-sm text-gray-700">${item.step}</td>
-                        <td class="px-6 py-4 whitespace-normal text-sm text-gray-700">${singleChallenge.trim() + (singleChallenge.endsWith('.') ? '' : '.')}</td> <!-- Add back period if missing -->
-                        <td class="px-6 py-4 whitespace-normal text-sm text-gray-700">${item.solution}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">TBD</td>
+                        <td class="px-6 py-4 whitespace-normal text-sm font-medium text-gray-900 w-phase">${item.category}</td>
+                        <td class="px-6 py-4 whitespace-normal text-sm text-gray-700 w-step">${item.step}</td>
+                        <td class="px-6 py-4 whitespace-normal text-sm text-gray-700 w-challenge">${singleChallenge.trim() + (singleChallenge.endsWith('.') ? '' : '.')}</td> <!-- Add back period if missing -->
+                        <td class="px-6 py-4 whitespace-normal text-sm text-gray-700 w-solution">${item.solution}</td>
+                        <td class="px-6 py-4 whitespace-normal text-sm text-gray-700 w-ownership">${ownershipFormatted}</td>
                     </tr>
                 `;
             });
         });
 
-
-        contentContainer.innerHTML = `
-            <div class="fade-in">
-                <button id="back-button-table" class="mb-4 px-6 py-2 bg-[#6d4c41] text-white rounded-lg shadow hover:bg-[#5d4037] transition">← Back</button>
-                <h2 class="text-3xl font-bold text-[#6d4c41] mb-2">Detailed Challenges: ${title}</h2>
-                <p class="text-lg text-[#8d6e63] mb-8">Below is a comprehensive list of all challenges ${type === 'type' ? `of type '${title}' across all phases` : type === 'phase' ? `identified within the '${title}' phase` : `of type '${title.split(' - ')[1]}' within the '${title.split(' - ')[0]}' phase`}, with each specific challenge statement presented on its own row, along with their respective project phases, operational steps, proposed solutions, and ownership status. This granular view helps in understanding individual pain points more clearly.</p>
-                <div class="bg-white p-6 rounded-2xl shadow-lg border border-gray-200 overflow-x-auto">
-                    <table class="min-w-full divide-y divide-gray-200">
-                        <thead class="bg-[#f8f7f4]">
-                            <tr>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-[#5d4037] uppercase tracking-wider rounded-tl-lg">Project Phase</th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-[#5d4037] uppercase tracking-wider">Operational Step</th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-[#5d4037] uppercase tracking-wider">Challenge</th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-[#5d4037] uppercase tracking-wider">Solution</th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-[#5d4037] uppercase tracking-wider rounded-tr-lg">Ownership</th>
-                            </tr>
-                        </thead>
-                        <tbody class="bg-white divide-y divide-gray-200">
-                            ${tableRowsHtml}
-                        </tbody>
-                    </table>
-                </div>
-                <button id="back-button-table-bottom" class="mt-8 px-6 py-2 bg-[#6d4c41] text-white rounded-lg shadow hover:bg-[#5d4037] transition">← Back</button>
-            </div>
-        `;
-        window.scrollTo(0, 0); // Scroll to top when rendering table
+        // The innerHTML for the container is already set in renderContent()
+        // Now just populate the tbody
+        const tbody = contentContainer.querySelector('.detailed-table tbody');
+        if (tbody) {
+            tbody.innerHTML = tableRowsHtml;
+        }
 
         document.getElementById('back-button-table').addEventListener('click', handleBackFromTable);
         document.getElementById('back-button-table-bottom').addEventListener('click', handleBackFromTable);
