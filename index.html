@@ -15,7 +15,7 @@
         }
         /* Chosen Palette: Earthy Neutrals */
         /* Application Structure Plan: A single-page application with a fixed sidebar for navigating project phases. The main view is a dashboard summarizing all challenges. Clicking a phase reveals a dedicated section with an overview chart (donut) and an interactive accordion of execution steps, challenges, and solutions. When a bar in either dashboard chart is clicked, a detailed table of challenges for that category/phase appears. This structure provides both a high-level overview and a progressive disclosure of details, preventing user overload and facilitating targeted exploration. */
-        /* Visualization & Content Choices: 1. Overall Challenges (Dashboard): Goal: Compare challenge types across the entire project. Viz: Horizontal Bar Chart (Chart.js). Interaction: Hover for tooltips, Click on bar to filter and display detailed table. Justification: Clearly shows which category (People, Process, Technology) is the most significant source of issues and allows drill-down. 2. Challenges by Phase (Dashboard): Goal: Compare challenges across project phases. Viz: Vertical Bar Chart (Chart.js). Interaction: Hover for tooltips, Click on bar to filter and display detailed table. Justification: Provides an overview of problem areas across different project stages and allows drill-down. 3. Phase-Specific Challenges: Goal: Show challenge proportions within a phase. Viz: Donut Chart (Chart.js). Interaction: Hover. Justification: Quick, visual summary for each section. 4. Execution Steps/Challenges/Solutions: Goal: Organize detailed text. Viz: HTML/Tailwind Accordion. Interaction: Click to expand/collapse. Justification: Manages information density and allows users to focus on specific steps without being overwhelmed. 5. Detailed Challenges Table: Goal: Present filtered challenge data in an organized, explorable format, with each individual challenge statement on its own row. Viz: HTML Table. Interaction: Static display of filtered data. Justification: Provides comprehensive details for a specific challenge category/phase, enhancing readability for multi-part challenges. */
+        /* Visualization & Content Choices: 1. Overall Challenges (Dashboard): Goal: Compare challenge types across the entire project. Viz: Horizontal Bar Chart (Chart.js). Interaction: Hover for tooltips, Click on bar to filter and display detailed table. Justification: Clearly shows which category (People, Process, Technology) is the most significant source of issues and allows drill-down. 2. Challenges by Phase (Dashboard): Goal: Compare challenges across project phases. Viz: Vertical Bar Chart (Chart.js). Interaction: Hover for tooltips, Click on bar to filter and display detailed table. Justification: Provides an overview of problem areas across different project stages and allows drill-down. 3. Phase-Specific Challenges: Goal: Show challenge proportions within a phase. Viz: Donut Chart (Chart.js). Interaction: Hover, Click on segment to filter and display detailed table of challenges of that type within the phase. Justification: Quick, visual summary for each section with drill-down capability. 4. Execution Steps/Challenges/Solutions: Goal: Organize detailed text. Viz: HTML/Tailwind Accordion. Interaction: Click to expand/collapse. Justification: Manages information density and allows users to focus on specific steps without being overwhelmed. 5. Detailed Challenges Table: Goal: Present filtered challenge data in an organized, explorable format, with each individual challenge statement on its own row. Viz: HTML Table. Interaction: Static display of filtered data. Justification: Provides comprehensive details for a specific challenge category/phase, enhancing readability for multi-part challenges. */
         /* CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. */
         .chart-container {
             position: relative;
@@ -64,6 +64,16 @@
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
+
+        /* Project Flow Specific Styles */
+        .flow-category-toggle, .flow-step-toggle {
+            transition: background-color 0.2s ease-in-out;
+        }
+        .flow-category-content, .flow-step-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
     </style>
 </head>
 <body class="bg-[#f8f7f4]">
@@ -72,7 +82,8 @@
         <aside id="sidebar" class="bg-[#efebe9] w-64 h-screen fixed top-0 left-0 z-20 transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out flex flex-col">
             <div class="p-6">
                 <h1 class="text-xl font-bold text-[#6d4c41] mb-2">Project Execution</h1>
-                <p class="text-sm text-[#8d6e63]">Interactive Plan</p>
+                <p class="text-sm text-[#8d6e63] mb-2">Interactive Plan</p>
+                <p class="text-xs text-[#8d6e63]">Phases of Project Lifecycle</p>
             </div>
             <nav id="navigation" class="mt-4 flex flex-col space-y-1 px-4 flex-1 overflow-y-auto"></nav>
         </aside>
@@ -148,9 +159,12 @@ document.addEventListener('DOMContentLoaded', () => {
         return acc;
     }, {});
 
-    const phases = ['Dashboard', ...Object.keys(groupedData)];
+    const phases = ['Dashboard', 'Project Flow', ...Object.keys(groupedData)]; // Added 'Project Flow'
     let activePhase = 'Dashboard';
     let charts = {};
+    let currentTableData = []; // Store data for detailed table
+    let currentTableTitle = ''; // Store title for detailed table
+    let currentTableType = ''; // 'type', 'phase', or 'phase_category'
 
     // Unified color palette for consistency across all charts and tags
     const challengeTypeColors = {
@@ -194,6 +208,14 @@ document.addEventListener('DOMContentLoaded', () => {
         `).join('');
     }
 
+    function handleGoHome() {
+        activePhase = 'Dashboard';
+        currentTableType = ''; // Clear any active table view
+        currentTableData = [];
+        currentTableTitle = '';
+        renderContent();
+    }
+
     function renderContent() {
         // Destroy existing chart if any
         for (const chartId in charts) {
@@ -203,13 +225,15 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         charts = {}; // Clear the charts object
 
-        if (activePhase === 'Dashboard') {
+        if (currentTableType) { // If a detailed table is being displayed
+            renderDetailedTable(currentTableTitle, currentTableData, currentTableType);
+        } else if (activePhase === 'Dashboard') {
             contentContainer.innerHTML = `
                 <div class="fade-in">
                     <h2 class="text-3xl font-bold text-[#6d4c41] mb-2">Project Execution Dashboard</h2>
                     <p class="text-lg text-[#8d6e63] mb-8">An overview of challenges across the entire project lifecycle. Click on a bar to see a detailed list of challenges for that category or phase.</p>
 
-                    <div class="grid grid-cols-1 gap-8 mb-8">
+                    <div class="grid grid-cols-1 gap-8 mb-8"> <!-- Changed from md:grid-cols-2 to grid-cols-1 -->
                         <div class="bg-white p-6 rounded-2xl shadow-lg border border-gray-200">
                             <h3 class="text-xl font-semibold mb-4 text-[#5d4037]">Challenge Distribution by Type</h3>
                             <p class="text-sm text-gray-600 mb-6">This chart summarizes all identified challenges, categorized into People, Process, and Technology domains. It provides a high-level view of where systemic issues are most prevalent.</p>
@@ -231,6 +255,9 @@ document.addEventListener('DOMContentLoaded', () => {
             renderDashboardChartType();
             renderChallengesByPhaseChart();
             window.scrollTo(0, 0); // Scroll to top when rendering dashboard
+        } else if (activePhase === 'Project Flow') { // New 'Project Flow' view
+            renderProjectFlow();
+            window.scrollTo(0, 0);
         } else {
             const phaseData = groupedData[activePhase];
             const challengeCounts = phaseData.reduce((acc, item) => {
@@ -241,13 +268,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
             contentContainer.innerHTML = `
                 <div class="fade-in">
+                    <button id="home-button" class="flex items-center px-4 py-2 bg-[#6d4c41] text-white rounded-lg shadow hover:bg-[#5d4037] transition mb-4">
+                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2 2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+                        Home
+                    </button>
                     <h2 class="text-3xl font-bold text-[#6d4c41] mb-2">${activePhase}</h2>
                     <p class="text-lg text-[#8d6e63] mb-8">Exploring the execution steps, challenges, and solutions for the ${activePhase.toLowerCase()} phase.</p>
 
                     <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
                         <div class="lg:col-span-1 bg-white p-6 rounded-2xl shadow-lg border border-gray-200">
                              <h3 class="text-xl font-semibold mb-4 text-[#5d4037]">Challenges in this Phase</h3>
-                             <p class="text-sm text-gray-600 mb-6">This chart shows the breakdown of challenges specific to the ${activePhase} phase, offering a quick visual summary of the primary pain points encountered here.</p>
+                             <p class="text-sm text-gray-600 mb-6">This chart shows the breakdown of challenges specific to the ${activePhase} phase. Click on a segment to view details of that challenge type within this phase.</p>
                             <div class="chart-container h-64 md:h-72">
                                 <canvas id="phase-chart-${activePhase.replace(/\s/g, '')}"></canvas>
                             </div>
@@ -260,8 +291,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     </div>
                 </div>
             `;
-            renderPhaseChart(challengeCounts);
+            renderPhaseChart(challengeCounts, activePhase); // Pass activePhase to chart renderer
             renderAccordion(phaseData);
+            document.getElementById('home-button').addEventListener('click', handleGoHome); // Add event listener for the new home button
             window.scrollTo(0, 0); // Scroll to top for phase detail page
         }
         updateActiveLink();
@@ -287,6 +319,141 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
         `).join('');
     }
+
+    // New function to render the project flow visualization
+    function renderProjectFlow() {
+        // Define the specific order of phases for the flow
+        const flowPhasesOrder = [
+            'Conceptualization & Planning',
+            'Introduction of PMS',
+            'Detailed Budget Adaptation',
+            'Team Recruitment Process',
+            'Protocol, Tools & ICF Development',
+            'Formation of Expert Committees',
+            'Site Selection',
+            'Approvals & Compliance',
+            'Pre-Implementation Setup',
+            'Training & Field Readiness',
+            'Quality Assurance Protocol & Execution',
+            'Implementation & Monitoring',
+            'Data Collection, Management & Analysis',
+            'Dissemination & Publication',
+            'Scale-Up Planning'
+        ];
+
+        let flowHtml = `
+            <div class="fade-in">
+                <button id="home-button" class="flex items-center px-4 py-2 bg-[#6d4c41] text-white rounded-lg shadow hover:bg-[#5d4037] transition mb-4">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2 2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+                    Home
+                </button>
+                <h2 class="text-3xl font-bold text-[#6d4c41] mb-2">Project Execution Flow</h2>
+                <p class="text-lg text-[#8d6e63] mb-8">Explore the detailed breakdown of project execution phases, steps, and their associated challenges and solutions.</p>
+                <div id="project-flow-accordion-container" class="space-y-4">
+        `;
+
+        flowPhasesOrder.forEach((category, categoryIndex) => {
+            const categoryData = projectData.filter(item => item.category === category) || []; // Filter items belonging to this category
+
+            flowHtml += `
+                <div class="border border-gray-200 rounded-lg overflow-hidden">
+                    <button class="flow-category-toggle w-full text-left p-4 bg-[#f0e6e0] hover:bg-[#eaddd7] transition flex justify-between items-center" data-category-index="${categoryIndex}">
+                        <span class="font-semibold text-[#5d4037] text-lg">${categoryIndex + 1}. ${category}</span>
+                        <svg class="w-5 h-5 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </button>
+                    <div class="flow-category-content bg-white">
+                        <div class="p-4 space-y-3">
+            `;
+
+            categoryData.forEach((item, itemIndex) => {
+                flowHtml += `
+                            <div class="border border-gray-100 rounded-md overflow-hidden">
+                                <button class="flow-step-toggle w-full text-left p-3 bg-[#f8f7f4] hover:bg-[#f0e6e0] transition flex justify-between items-center" data-category-index="${categoryIndex}" data-item-index="${itemIndex}">
+                                    <span class="font-medium text-[#6d4c41] text-base">${item.step}</span>
+                                    <svg class="w-4 h-4 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                                </button>
+                                <div class="flow-step-content bg-white">
+                                    <div class="p-3 border-t border-gray-100 text-sm text-gray-700">
+                                        <h4 class="font-semibold mb-1 text-[#5d4037]">Challenge:</h4>
+                                        <p class="mb-2">${item.challenge}</p>
+                                        <h4 class="font-semibold mb-1 text-[#5d4037]">PM Solution:</h4>
+                                        <p>${item.solution}</p>
+                                    </div>
+                                </div>
+                            </div>
+                `;
+            });
+
+            flowHtml += `
+                        </div>
+                    </div>
+                </div>
+            `;
+        });
+
+        flowHtml += `
+                </div>
+            </div>
+        `;
+        contentContainer.innerHTML = flowHtml;
+        document.getElementById('home-button').addEventListener('click', handleGoHome);
+
+        // Add event listeners for the new flow accordions
+        document.querySelectorAll('.flow-category-toggle').forEach(button => {
+            button.addEventListener('click', (e) => {
+                const content = e.currentTarget.nextElementSibling;
+                const icon = e.currentTarget.querySelector('svg');
+
+                // Close all other top-level categories
+                document.querySelectorAll('.flow-category-content').forEach(otherContent => {
+                    if (otherContent !== content) {
+                        otherContent.style.maxHeight = null;
+                        otherContent.previousElementSibling.querySelector('svg').classList.remove('rotate-180');
+                    }
+                });
+
+                if (content.style.maxHeight) {
+                    content.style.maxHeight = null;
+                    icon.classList.remove('rotate-180');
+                } else {
+                    // Temporarily set height to scrollHeight for opening
+                    content.style.maxHeight = content.scrollHeight + "px";
+                    icon.classList.add('rotate-180');
+                    // Recalculate after a short delay to ensure all nested elements have rendered
+                    setTimeout(() => {
+                        content.style.maxHeight = content.scrollHeight + "px";
+                    }, 50); // Small delay
+                }
+            });
+        });
+
+        document.querySelectorAll('.flow-step-toggle').forEach(button => {
+            button.addEventListener('click', (e) => {
+                const content = e.currentTarget.nextElementSibling;
+                const icon = e.currentTarget.querySelector('svg');
+
+                if (content.style.maxHeight) {
+                    content.style.maxHeight = null;
+                    icon.classList.remove('rotate-180');
+                } else {
+                    content.style.maxHeight = content.scrollHeight + "px";
+                    icon.classList.add('rotate-180');
+                    // When a step content is opened, also ensure its parent category is fully open
+                    const parentCategoryContent = e.currentTarget.closest('.flow-category-content');
+                    if (parentCategoryContent && !parentCategoryContent.style.maxHeight) {
+                        parentCategoryContent.style.maxHeight = parentCategoryContent.scrollHeight + "px";
+                    }
+                    setTimeout(() => {
+                        content.style.maxHeight = content.scrollHeight + "px";
+                        if (parentCategoryContent) {
+                             parentCategoryContent.style.maxHeight = parentCategoryContent.scrollHeight + "px";
+                        }
+                    }, 50); // Small delay
+                }
+            });
+        });
+    }
+
 
     const chartConfig = {
         plugins: {
@@ -365,7 +532,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (elements.length > 0) {
                         const clickedElementIndex = elements[0].index;
                         const label = charts['dashboard-chart-type'].data.labels[clickedElementIndex];
-                        renderChallengesTable(label);
+                        currentTableTitle = label;
+                        currentTableData = projectData.filter(item => getChallengeType(item.type) === label);
+                        currentTableType = 'type'; // Indicates filtering by overall challenge type
+                        renderContent();
                     }
                 }
             }
@@ -410,7 +580,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (elements.length > 0) {
                         const clickedElementIndex = elements[0].index;
                         const label = charts['dashboard-chart-phase'].data.labels[clickedElementIndex];
-                        renderPhaseChallengesTable(label);
+                        currentTableTitle = label;
+                        currentTableData = projectData.filter(item => item.category === label);
+                        currentTableType = 'phase'; // Indicates filtering by phase
+                        renderContent();
                     }
                 }
             }
@@ -418,15 +591,15 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
 
-    function renderPhaseChart(challengeCounts) {
-        const canvasId = `phase-chart-${activePhase.replace(/\s/g, '')}`;
+    function renderPhaseChart(challengeCounts, phaseName) {
+        const canvasId = `phase-chart-${phaseName.replace(/\s/g, '')}`;
         const ctx = document.getElementById(canvasId).getContext('2d');
         const labels = Object.keys(challengeCounts);
 
         const backgroundColors = labels.map(label => challengeTypeColors[label] ? challengeTypeColors[label].background : challengeTypeColors['Mixed'].background);
         const borderColors = labels.map(label => challengeTypeColors[label] ? challengeTypeColors[label].border : challengeTypeColors['Mixed'].border);
 
-        charts[activePhase] = new Chart(ctx, {
+        charts[phaseName] = new Chart(ctx, { // Use phaseName as the key for charts object
             type: 'doughnut',
             data: {
                 labels: labels,
@@ -437,25 +610,39 @@ document.addEventListener('DOMContentLoaded', () => {
                     borderWidth: 2,
                 }]
             },
-            options: { ...chartConfig, cutout: '60%' }
+            options: {
+                ...chartConfig,
+                cutout: '60%',
+                onClick: (event, elements) => {
+                    if (elements.length > 0) {
+                        const clickedElementIndex = elements[0].index;
+                        const label = charts[phaseName].data.labels[clickedElementIndex]; // Get label from current phase chart
+                        
+                        // Filter by current phase AND clicked challenge type
+                        currentTableTitle = `${phaseName} - ${label} Challenges`;
+                        currentTableData = projectData.filter(item => item.category === phaseName && getChallengeType(item.type) === label);
+                        currentTableType = 'phase_category'; // Indicates filtering by phase AND category
+                        renderContent();
+                    }
+                }
+            }
         });
     }
 
-    function renderChallengesTable(challengeType) {
-        const filteredChallenges = projectData.filter(item => getChallengeType(item.type) === challengeType);
-
+    function renderDetailedTable(title, data, type) {
         let tableRowsHtml = '';
-        filteredChallenges.forEach(item => {
+        data.forEach(item => {
             // Split the challenge string into individual sentences
             const challengesArray = item.challenge.split(/\.\s*(?=[A-Z])/).filter(s => s.trim() !== ''); // Split by period followed by a space and an uppercase letter, then filter empty strings
             
-            challengesArray.forEach((singleChallenge, index) => {
+            challengesArray.forEach((singleChallenge) => {
                 tableRowsHtml += `
                     <tr>
                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">${item.category}</td>
                         <td class="px-6 py-4 whitespace-normal text-sm text-gray-700">${item.step}</td>
                         <td class="px-6 py-4 whitespace-normal text-sm text-gray-700">${singleChallenge.trim() + (singleChallenge.endsWith('.') ? '' : '.')}</td> <!-- Add back period if missing -->
                         <td class="px-6 py-4 whitespace-normal text-sm text-gray-700">${item.solution}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">TBD</td>
                     </tr>
                 `;
             });
@@ -464,9 +651,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
         contentContainer.innerHTML = `
             <div class="fade-in">
-                <button id="back-to-dashboard-top" class="mb-4 px-6 py-2 bg-[#6d4c41] text-white rounded-lg shadow hover:bg-[#5d4037] transition">← Back to Dashboard</button>
-                <h2 class="text-3xl font-bold text-[#6d4c41] mb-2">Detailed Challenges: ${challengeType}</h2>
-                <p class="text-lg text-[#8d6e63] mb-8">Below is a comprehensive list of all challenges categorized as '${challengeType}', with each specific challenge statement presented on its own row, along with their respective project phases, operational steps, and proposed solutions. This granular view helps in understanding individual pain points more clearly.</p>
+                <button id="back-button-table" class="mb-4 px-6 py-2 bg-[#6d4c41] text-white rounded-lg shadow hover:bg-[#5d4037] transition">← Back</button>
+                <h2 class="text-3xl font-bold text-[#6d4c41] mb-2">Detailed Challenges: ${title}</h2>
+                <p class="text-lg text-[#8d6e63] mb-8">Below is a comprehensive list of all challenges ${type === 'type' ? `of type '${title}' across all phases` : type === 'phase' ? `identified within the '${title}' phase` : `of type '${title.split(' - ')[1]}' within the '${title.split(' - ')[0]}' phase`}, with each specific challenge statement presented on its own row, along with their respective project phases, operational steps, proposed solutions, and ownership status. This granular view helps in understanding individual pain points more clearly.</p>
                 <div class="bg-white p-6 rounded-2xl shadow-lg border border-gray-200 overflow-x-auto">
                     <table class="min-w-full divide-y divide-gray-200">
                         <thead class="bg-[#f8f7f4]">
@@ -474,7 +661,8 @@ document.addEventListener('DOMContentLoaded', () => {
                                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-[#5d4037] uppercase tracking-wider rounded-tl-lg">Project Phase</th>
                                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-[#5d4037] uppercase tracking-wider">Operational Step</th>
                                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-[#5d4037] uppercase tracking-wider">Challenge</th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-[#5d4037] uppercase tracking-wider rounded-tr-lg">Solution</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-[#5d4037] uppercase tracking-wider">Solution</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-[#5d4037] uppercase tracking-wider rounded-tr-lg">Ownership</th>
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200">
@@ -482,75 +670,21 @@ document.addEventListener('DOMContentLoaded', () => {
                         </tbody>
                     </table>
                 </div>
-                <button id="back-to-dashboard-bottom" class="mt-8 px-6 py-2 bg-[#6d4c41] text-white rounded-lg shadow hover:bg-[#5d4037] transition">← Back to Dashboard</button>
+                <button id="back-button-table-bottom" class="mt-8 px-6 py-2 bg-[#6d4c41] text-white rounded-lg shadow hover:bg-[#5d4037] transition">← Back</button>
             </div>
         `;
         window.scrollTo(0, 0); // Scroll to top when rendering table
 
-        document.getElementById('back-to-dashboard-top').addEventListener('click', () => {
-            activePhase = 'Dashboard';
-            renderContent();
-        });
-        document.getElementById('back-to-dashboard-bottom').addEventListener('click', () => {
-            activePhase = 'Dashboard';
-            renderContent();
-        });
+        document.getElementById('back-button-table').addEventListener('click', handleBackFromTable);
+        document.getElementById('back-button-table-bottom').addEventListener('click', handleBackFromTable);
     }
 
-    function renderPhaseChallengesTable(phaseName) {
-        const filteredChallenges = projectData.filter(item => item.category === phaseName);
-
-        let tableRowsHtml = '';
-        filteredChallenges.forEach(item => {
-            const challengesArray = item.challenge.split(/\.\s*(?=[A-Z])/).filter(s => s.trim() !== '');
-            
-            challengesArray.forEach((singleChallenge, index) => {
-                tableRowsHtml += `
-                    <tr>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">${item.category}</td>
-                        <td class="px-6 py-4 whitespace-normal text-sm text-gray-700">${item.step}</td>
-                        <td class="px-6 py-4 whitespace-normal text-sm text-gray-700">${singleChallenge.trim() + (singleChallenge.endsWith('.') ? '' : '.')}</td>
-                        <td class="px-6 py-4 whitespace-normal text-sm text-gray-700">${getChallengeType(item.type)}</td>
-                        <td class="px-6 py-4 whitespace-normal text-sm text-gray-700">${item.solution}</td>
-                    </tr>
-                `;
-            });
-        });
-
-        contentContainer.innerHTML = `
-            <div class="fade-in">
-                <button id="back-to-dashboard-top" class="mb-4 px-6 py-2 bg-[#6d4c41] text-white rounded-lg shadow hover:bg-[#5d4037] transition">← Back to Dashboard</button>
-                <h2 class="text-3xl font-bold text-[#6d4c41] mb-2">Detailed Challenges for: ${phaseName}</h2>
-                <p class="text-lg text-[#8d6e63] mb-8">Below is a comprehensive list of all challenges identified within the '${phaseName}' phase, with each specific challenge statement presented on its own row, along with their respective operational steps, challenge type, and proposed solutions. This granular view helps in understanding individual pain points more clearly for this phase.</p>
-                <div class="bg-white p-6 rounded-2xl shadow-lg border border-gray-200 overflow-x-auto">
-                    <table class="min-w-full divide-y divide-gray-200">
-                        <thead class="bg-[#f8f7f4]">
-                            <tr>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-[#5d4037] uppercase tracking-wider rounded-tl-lg">Project Phase</th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-[#5d4037] uppercase tracking-wider">Operational Step</th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-[#5d4037] uppercase tracking-wider">Challenge</th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-[#5d4037] uppercase tracking-wider">Category</th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-[#5d4037] uppercase tracking-wider rounded-tr-lg">Solution</th>
-                            </tr>
-                        </thead>
-                        <tbody class="bg-white divide-y divide-gray-200">
-                            ${tableRowsHtml}
-                        </tbody>
-                    </table>
-                </div>
-                <button id="back-to-dashboard-bottom" class="mt-8 px-6 py-2 bg-[#6d4c41] text-white rounded-lg shadow hover:bg-[#5d4037] transition">← Back to Dashboard</button>
-            </div>
-        `;
-        window.scrollTo(0, 0); // Scroll to top when rendering table
-
-        document.getElementById('back-to-dashboard-top').addEventListener('click', () => {
-            activePhase = 'Dashboard';
-            renderContent();
-        });
-        document.getElementById('back-to-dashboard-bottom').addEventListener('click', () => {
-            activePhase = 'Dashboard';
-            renderContent();
-        });
+    function handleBackFromTable() {
+        currentTableData = [];
+        currentTableTitle = '';
+        currentTableType = '';
+        activePhase = 'Dashboard'; // Ensure returning to Dashboard
+        renderContent(); // Re-render to Dashboard
     }
 
     function updateActiveLink() {
@@ -569,9 +703,11 @@ document.addEventListener('DOMContentLoaded', () => {
         if (targetPhase) { // Ensure a phase was clicked
             if (targetPhase === 'Dashboard') {
                 activePhase = 'Dashboard'; // Ensure activePhase is correct
+                currentTableType = ''; // Clear table display
                 renderContent(); // Force re-render of dashboard
             } else if (targetPhase !== activePhase) {
                 activePhase = targetPhase;
+                currentTableType = ''; // Clear table display
                 renderContent();
             }
         }
