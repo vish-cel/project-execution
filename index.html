@@ -548,7 +548,7 @@ const generatePeopleVsProcessDetailedContent = () => {
                 techCannotSolve = "Technology provides insights, but human leadership must commit to data-driven decision-making and resist setting arbitrary targets.";
             } else if (challenge.includes("There is no internal planning for HR requirements for scale-up sites.")) {
                 techCanSolve = "HRIS for workforce planning and talent mapping. Recruitment software to manage pipeline for scale-up. Collaboration tools for HR-project team communication.";
-                techCannotSolve = "Technology cannot replace the strategic planning of HR needs or the commitment of resources to address them. These are organizational decisions.";
+                techCannotSolve = "Technology cannot replace the strategic planning of HR needs and the commitment of resources to address them. These are organizational decisions.";
             } else if (challenge.includes("Stakeholder mapping and liaisoning with the health system often occur too late.")) {
                 techCanSolve = "CRM systems to manage stakeholder relationships. Project management software to include stakeholder engagement as early tasks with deadlines.";
                 techCannotSolve = "Technology facilitates contact, but building relationships, trust, and effective liaisoning requires human interpersonal skills and dedicated effort.";
@@ -1307,30 +1307,52 @@ document.addEventListener('DOMContentLoaded', () => {
         const headers = [
             "Project Phase",
             "Operational Step",
-            "Challenge",
+            "Individual Challenge Statement", // Changed header for clarity
             "Solution",
             "Ownership",
             "Challenge Type"
         ];
 
-        const rows = data.map(item => [
-            JSON.stringify(item.category.replace(/\n/g, '\\n')),
-            JSON.stringify(item.step.replace(/\n/g, '\\n')),
-            JSON.stringify(item.challenge.replace(/\n/g, '\\n')),
-            JSON.stringify(item.solution.replace(/\n/g, '\\n')),
-            JSON.stringify(item.ownership.replace(/\n/g, '\\n')),
-            JSON.stringify(getChallengeType(item.type).replace(/\n/g, '\\n'))
-        ]);
+        let allRows = [];
+        data.forEach(item => {
+            const challengesArray = item.challenge.split(/\.\s*(?=[A-Z])/).filter(s => s.trim() !== ''); // Split challenges
+            const solutionsArray = item.solution ? item.solution.split(/\.\s*(?=[A-Z])|\;\s*(?=[A-Z])/).filter(s => s.trim() !== '') : ['']; // Split solutions, ensure it's an array for join
+            const ownershipFormatted = item.ownership ? item.ownership.split(', ').map(o => o.trim()).filter(o => o).join(', ') : '';
+            const challengeType = getChallengeType(item.type);
+
+            if (challengesArray.length === 0) {
+                // Handle cases where no specific challenge statements are found
+                allRows.push([
+                    JSON.stringify(item.category.replace(/\n/g, '\\n')),
+                    JSON.stringify(item.step.replace(/\n/g, '\\n')),
+                    JSON.stringify('No specific challenge statements listed.'),
+                    JSON.stringify(solutionsArray.join(' ').replace(/\n/g, '\\n')), // Join solutions for a single cell
+                    JSON.stringify(ownershipFormatted.replace(/\n/g, '\\n')),
+                    JSON.stringify(challengeType.replace(/\n/g, '\\n'))
+                ]);
+            } else {
+                challengesArray.forEach(singleChallenge => {
+                    allRows.push([
+                        JSON.stringify(item.category.replace(/\n/g, '\\n')),
+                        JSON.stringify(item.step.replace(/\n/g, '\\n')),
+                        JSON.stringify(singleChallenge.trim() + (singleChallenge.endsWith('.') ? '' : '.')).replace(/\n/g, '\\n'), // Add period if missing
+                        JSON.stringify(solutionsArray.join(' ').replace(/\n/g, '\\n')), // Join solutions for a single cell
+                        JSON.stringify(ownershipFormatted.replace(/\n/g, '\\n')),
+                        JSON.stringify(challengeType.replace(/\n/g, '\\n'))
+                    ]);
+                });
+            }
+        });
 
         let csvContent = headers.map(header => `"${header}"`).join(',') + '\n';
-        csvContent += rows.map(row => row.join(',')).join('\n');
+        csvContent += allRows.map(row => row.join(',')).join('\n');
 
         const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
         const link = document.createElement('a');
         if (link.download !== undefined) {
             const url = URL.createObjectURL(blob);
             link.setAttribute('href', url);
-            link.setAttribute('download', 'project_challenges.csv');
+            link.setAttribute('download', 'project_challenges_detailed.csv'); // Changed filename
             link.style.visibility = 'hidden';
             document.body.appendChild(link);
             link.click();
