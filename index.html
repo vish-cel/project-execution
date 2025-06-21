@@ -82,6 +82,8 @@
         .detailed-table th.w-challenge, .detailed-table td.w-challenge { width: 30%; min-width: 200px; }
         .detailed-table th.w-solution, .detailed-table td.w-solution { width: 30%; min-width: 200px; }
         .detailed-table th.w-ownership, .detailed-table td.w-ownership { width: 10%; min-width: 80px; } /* Adjusted for comma separation */
+        .detailed-table th.w-challenge-type, .detailed-table td.w-challenge-type { width: 10%; min-width: 80px; }
+
 
         /* Bullet points for table cells */
         .detailed-table ul {
@@ -378,7 +380,7 @@ const generatePeopleVsProcessDetailedContent = () => {
                 techCannotSolve = "Technology can streamline tasks, but the ultimate decision to redistribute workload, hire more HR staff, or empower PMs to delegate is a human management decision.";
             } else if (challenge.includes("Required team members are not hired even after the project has started")) {
                 techCanSolve = "Recruitment tracking systems can show bottlenecks in the hiring pipeline. Workforce planning software can forecast staffing needs based on project timelines.";
-                techCannotSolve = "Technology highlights the problem, but cannot force hiring if there are budget limitations, a lack of available talent, or slow decision-making from human managers.";
+                techCannotSolve = "Technology highlights the problem, but cannot force hiring if there are underlying issues like budget, lack of candidates, or slow decision-making from human managers.";
             } else if (challenge.includes("Individuals are recruited without adequate knowledge of their position or training")) {
                 techCanSolve = "Learning Management Systems (LMS) can deliver mandatory training modules. HRIS can ensure all new hires complete necessary digital paperwork and access role-specific resources.";
                 techCannotSolve = "Technology cannot ensure the *quality* of the training content, or that new hires *retain* and *apply* the knowledge. It also cannot compensate for poor job description design.";
@@ -395,7 +397,7 @@ const generatePeopleVsProcessDetailedContent = () => {
                 techCanSolve = "Skills databases or talent management systems can map available internal expertise. Automated scheduling tools can help coordinate SME availability.";
                 techCannotSolve = "Technology cannot *create* SMEs if they don't exist, or force their availability if their workload or priorities are managed elsewhere. Human negotiation is often required.";
             } else if (challenge.includes("Inputs from Site PIs/technical experts are taken at the last stage")) {
-                techCanSolve = "Collaboration platforms can integrate PI/expert input directly into early drafting phases. Automated workflows can trigger early review cycles for specific sections.";
+                techCanSolve = "Collaborative platforms can integrate PI/expert input directly into early drafting phases. Automated workflows can trigger early review cycles for specific sections.";
                 techCannotSolve = "Technology cannot overcome hierarchical barriers or a cultural tendency to involve experts only at final stages. Leadership must drive this change.";
             } else if (challenge.includes("Junior members often lack guidance")) {
                 techCanSolve = "E-learning modules for basic guidance. Internal communication platforms for quick questions. Centralized knowledge bases for self-service learning.";
@@ -435,7 +437,7 @@ const generatePeopleVsProcessDetailedContent = () => {
                 techCannotSolve = "Technology requires individuals to *update* their CVs and the organization to *enforce* this practice. It cannot automatically gather new skills/experiences.";
             } else if (challenge.includes("Queries are answered by senior members due to insufficient time for junior members.")) {
                 techCanSolve = "Knowledge bases and AI-powered chatbots can provide instant answers to common queries, reducing dependency on senior staff. E-learning for junior staff to build expertise.";
-                techCannotSolve = "Technology cannot replace the need for senior mentorship on complex, novel issues or the development of critical thinking skills in junior staff.";
+                techCannotSolve = "Technology cannot replace the unique expertise and judgment of senior members for complex queries. It also cannot improve their time management or availability if over-committed.";
             } else if (challenge.includes("Fee payments are delayed.")) {
                 techCanSolve = "Automated invoicing and payment systems. Financial software with automated reconciliation and reporting on payment statuses.";
                 techCannotSolve = "Technology cannot resolve budget shortfalls, bureaucratic delays in finance departments, or human errors in payment processing unless processes are redesigned.";
@@ -599,7 +601,7 @@ document.addEventListener('DOMContentLoaded', () => {
         'Technology': { background: '#c8e6c9', border: '#1b5e20' },
         'People + Process': { background: '#ffe0b2', border: '#e65100' },
         'People + Technology': { background: '#d1c4e9', border: '#311b92' },
-        'Process + Technology': { background: '#c8e6c9', border: '#1b5e20' },
+    'Process + Technology': { background: '#c8e6c9', border: '#1b5e20' },
         'People + Process + Technology': { background: '#a7d9b9', border: '#004d40' },
         'Mixed': { background: '#b0bec5', border: '#263238' },
         'All': { background: '#e0e0e0', border: '#607d8b'}
@@ -691,6 +693,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                     <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-[#5d4037] uppercase tracking-wider rounded-tl-lg w-phase">Project Phase</th>
                                     <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-[#5d4037] uppercase tracking-wider w-step">Operational Step</th>
                                     <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-[#5d4037] uppercase tracking-wider w-challenge">Challenge</th>
+                                    ${currentTableType === 'phase' ? '<th scope="col" class="px-6 py-3 text-left text-xs font-medium text-[#5d4037] uppercase tracking-wider w-challenge-type">Challenge Type</th>' : ''}
                                     <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-[#5d4037] uppercase tracking-wider w-solution">Solution</th>
                                     <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-[#5d4037] uppercase tracking-wider rounded-tr-lg w-ownership">Ownership</th>
                                 </tr>
@@ -1270,6 +1273,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <td class="px-6 py-4 whitespace-normal text-sm font-medium text-gray-900 w-phase">${item.category}</td>
                     <td class="px-6 py-4 whitespace-normal text-sm text-gray-700 w-step">${item.step}</td>
                     <td class="px-6 py-4 whitespace-normal text-sm text-gray-700 w-challenge">${challengeHtml}</td>
+                    ${type === 'phase' ? `<td class="px-6 py-4 whitespace-normal text-sm text-gray-700 w-challenge-type">${getChallengeType(item.type)}</td>` : ''}
                     <td class="px-6 py-4 whitespace-normal text-sm text-gray-700 w-solution">${solutionHtml}</td>
                     <td class="px-6 py-4 whitespace-normal text-sm text-gray-700 w-ownership">${ownershipFormatted}</td>
                 </tr>
