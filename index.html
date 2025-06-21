@@ -372,7 +372,7 @@ const generatePeopleVsProcessDetailedContent = () => {
                 techCannotSolve = "Technology provides data, but humans must interpret it and make the decision to adjust budgets and allocate personnel appropriately, often facing political or financial constraints.";
             } else if (challenge.includes("PMs are often unaware of the submitted budget") || challenge.includes("PMs’ suggestions for cost optimization are overlooked")) {
                 techCanSolve = "Integrated financial and project management dashboards can provide real-time budget visibility to PMs. Digital suggestion boxes or collaboration platforms can capture and track cost-saving ideas.";
-                CannotSolve = "Technology cannot build trust between PMs and finance, or ensure that leadership genuinely values and acts upon PM input. This requires organizational culture change.";
+                techCannotSolve = "Technology cannot build trust between PMs and finance, or ensure that leadership genuinely values and acts upon PM input. This requires organizational culture change.";
             } else if (challenge.includes("PMs are overloaded with JD preparation, CV screening, and interviewing")) {
                 techCanSolve = "Applicant Tracking Systems (ATS) automate job posting and initial CV filtering. AI tools can assist with drafting JDs and pre-screening candidates.";
                 techCannotSolve = "Technology can streamline tasks, but the ultimate decision to redistribute workload, hire more HR staff, or empower PMs to delegate is a human management decision.";
@@ -683,7 +683,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <div class="fade-in">
                     <button id="back-button-table" class="mb-4 px-6 py-2 bg-[#6d4c41] text-white rounded-lg shadow hover:bg-[#5d4037] transition">← Back</button>
                     <h2 class="text-3xl font-bold text-[#6d4c41] mb-2">Detailed Challenges: ${currentTableTitle}</h2>
-                    <p class="text-lg text-[#8d6e63] mb-8">Below is a comprehensive list of all challenges ${currentTableType === 'type' ? `of type '${currentTableTitle}' across all phases` : currentTableType === 'phase' ? `identified within the '${currentTableTitle}' phase` : currentTableType === 'phase_category' ? `of type '${currentTableTitle.split(' - ')[1]}' within the '${currentTableTitle.split(' - ')[0]}' phase` : currentTableType === 'ownership' ? `associated with '${currentTableTitle}' across all phases` : currentTableType === 'phase_ownership' ? `associated with '${currentTableTitle.split(' - ')[1]}' within the '${currentTableTitle.split(' - ')[0]}' phase` : ''}, with each specific challenge statement presented on its own row, along with their respective project phases, operational steps, proposed solutions, and ownership status. This granular view helps in understanding individual pain points more clearly.</p>
+                    <p class="text-lg text-[#8d6e63] mb-8">Below is a comprehensive list of all challenges ${currentTableType === 'type' ? `of type '${currentTableTitle}' across all phases` : currentTableType === 'phase' ? `identified within the '${currentTableTitle}' phase` : currentTableType === 'phase_category' ? `of type '${currentTableTitle.split(' - ')[1]}' within the '${currentTableTitle.split(' - ')[0]}' phase` : currentTableType === 'ownership' ? `associated with '${currentTableTitle}' across all phases` : currentTableType === 'phase_ownership' ? `associated with '${currentTableTitle.split(' - ')[1]}' within the '${currentTableTitle.split(' - ')[0]}' phase` : ''}, along with their respective project phases, operational steps, proposed solutions, and ownership status. This granular view helps in understanding individual pain points more clearly.</p>
                     <div class="bg-white p-6 rounded-2xl shadow-lg border border-gray-200 overflow-x-auto">
                         <table class="min-w-full divide-y divide-gray-200 detailed-table">
                             <thead class="bg-[#f8f7f4]">
@@ -724,18 +724,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     <div class="grid grid-cols-1 gap-8 mb-8">
                         <div class="bg-white p-6 rounded-2xl shadow-lg border border-gray-200">
-                            <h3 class="text-xl font-semibold mb-4 text-[#5d4037]">Challenge Distribution by Type</h3>
-                            <p class="text-sm text-gray-600 mb-6">This chart summarizes all individual challenge statements, categorized into People, Process, and Technology domains. It provides a granular view of where systemic issues are most prevalent.</p>
-                            <div class="chart-container h-96" id="chart-container-dashboard-type">
-                                <canvas id="dashboard-chart-type"></canvas>
-                            </div>
-                        </div>
-                        <div class="bg-white p-6 rounded-2xl shadow-lg border border-gray-200">
                             <h3 class="text-xl font-semibold mb-4 text-[#5d4037]">Challenges by Project Phase</h3>
                             <p class="text-sm text-gray-600 mb-6">This chart shows the total count of individual challenge statements identified within each project phase, providing insights into which stages face the most hurdles.</p>
                             <p class="text-xs text-gray-500 mt-2">Note: Different shades of green are used for visual distinction between phases and do not indicate specific data values or intensity.</p>
                             <div class="chart-container h-96" id="chart-container-dashboard-phase">
                                 <canvas id="dashboard-chart-phase"></canvas>
+                            </div>
+                        </div>
+                        <div class="bg-white p-6 rounded-2xl shadow-lg border border-gray-200">
+                            <h3 class="text-xl font-semibold mb-4 text-[#5d4037]">Challenge Distribution by Type</h3>
+                            <p class="text-sm text-gray-600 mb-6">This chart summarizes all individual challenge statements, categorized into People, Process, and Technology domains. It provides a granular view of where systemic issues are most prevalent.</p>
+                            <div class="chart-container h-96" id="chart-container-dashboard-type">
+                                <canvas id="dashboard-chart-type"></canvas>
                             </div>
                         </div>
                     </div>
