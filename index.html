@@ -372,7 +372,7 @@ const generatePeopleVsProcessDetailedContent = () => {
                 techCannotSolve = "Technology provides data, but humans must interpret it and make the decision to adjust budgets and allocate personnel appropriately, often facing political or financial constraints.";
             } else if (challenge.includes("PMs are often unaware of the submitted budget") || challenge.includes("PMs’ suggestions for cost optimization are overlooked")) {
                 techCanSolve = "Integrated financial and project management dashboards can provide real-time budget visibility to PMs. Digital suggestion boxes or collaboration platforms can capture and track cost-saving ideas.";
-                techCannotSolve = "Technology cannot build trust between PMs and finance, or ensure that leadership genuinely values and acts upon PM input. This requires organizational culture change.";
+                CannotSolve = "Technology cannot build trust between PMs and finance, or ensure that leadership genuinely values and acts upon PM input. This requires organizational culture change.";
             } else if (challenge.includes("PMs are overloaded with JD preparation, CV screening, and interviewing")) {
                 techCanSolve = "Applicant Tracking Systems (ATS) automate job posting and initial CV filtering. AI tools can assist with drafting JDs and pre-screening candidates.";
                 techCannotSolve = "Technology can streamline tasks, but the ultimate decision to redistribute workload, hire more HR staff, or empower PMs to delegate is a human management decision.";
@@ -1290,10 +1290,17 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function handleBackFromTable() {
-        currentTableData = [];
-        currentTableTitle = '';
-        currentTableType = '';
-        activePhase = 'Dashboard';
+        if (currentTableType === 'phase_category' || currentTableType === 'phase_ownership') {
+            // If the table originated from a phase-specific chart, go back to that phase
+            const originalPhase = currentTableTitle.split(' - ')[0];
+            activePhase = originalPhase;
+        } else {
+            // Otherwise, go back to the Dashboard
+            activePhase = 'Dashboard';
+        }
+        currentTableData = []; // Clear the table data
+        currentTableTitle = ''; // Clear the table title
+        currentTableType = ''; // Clear the table type
         renderContent();
     }
 
