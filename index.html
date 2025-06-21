@@ -83,7 +83,63 @@
         .detailed-table th.w-solution, .detailed-table td.w-solution { width: 30%; min-width: 200px; }
         .detailed-table th.w-ownership, .detailed-table td.w-ownership { width: 10%; min-width: 80px; } /* Adjusted for comma separation */
 
-        /* Removed responsive table behavior for smaller screens as per user request */
+        /* Bullet points for table cells */
+        .detailed-table ul {
+            list-style-type: disc; /* Use disk for bullet points */
+            margin-left: 1.25rem; /* Indent bullets */
+            padding-left: 0;
+        }
+        .detailed-table li {
+            margin-bottom: 0.25rem; /* Space between list items */
+            line-height: 1.4;
+        }
+        .detailed-table li:last-child {
+            margin-bottom: 0;
+        }
+        
+        /* New table styles for People vs Process Challenges */
+        .challenges-table th {
+            white-space: normal; /* Allow text wrapping in headers */
+            vertical-align: top; /* Align header text to top */
+            padding-bottom: 0.75rem; /* Add padding below headers */
+        }
+        .challenges-table td {
+            vertical-align: top; /* Align cell content to top */
+            padding-top: 0.75rem; /* Add padding above cell content */
+            padding-bottom: 0.75rem; /* Add padding below cell content */
+        }
+        .challenges-table td:nth-child(1),
+        .challenges-table th:nth-child(1) { width: 15%; min-width: 100px; } /* Challenge Statement */
+        .challenges-table td:nth-child(2),
+        .challenges-table th:nth-child(2) { width: 8%; min-width: 70px; }  /* Type */
+        .challenges-table td:nth-child(3),
+        .challenges-table th:nth-child(3) { width: 38%; min-width: 200px; } /* Tech Can Solve */
+        .challenges-table td:nth-child(4),
+        .challenges-table th:nth-child(4) { width: 38%; min-width: 200px; } /* Tech Cannot Solve */
+
+
+        /* Styles for the checklist items (these styles are now effectively unused as the HTML for checklist is removed) */
+        .checklist-item {
+            display: flex;
+            align-items: center;
+            padding: 0.5rem 0;
+        }
+        .checklist-item input[type="checkbox"] {
+            margin-right: 0.75rem;
+            min-width: 18px; /* Ensure a clickable area */
+            min-height: 18px;
+            cursor: pointer;
+            accent-color: #6d4c41; /* Custom color for checkbox */
+        }
+        .checklist-item .step-text {
+            flex-grow: 1;
+            font-weight: 500;
+            color: #4a4a4a;
+        }
+        .checklist-item.completed .step-text {
+            text-decoration: line-through;
+            color: #888;
+        }
     </style>
 </head>
 <body class="bg-[#f8f7f4]">
@@ -107,7 +163,8 @@
                 </button>
             </div>
 
-            <div id="content-container" class="p-4 sm:p-6 lg:p-10">
+            <!-- Global Search and Filter Section - REMOVED from here -->
+            <div id="content-container" class="p-4 sm:p-6 lg:p-10 pt-0">
                 <!-- Content will be injected here -->
             </div>
         </main>
@@ -115,38 +172,84 @@
 
 <script>
 const projectData = [
-    { category: "Conceptualization & Planning", step: "Formation of Interim Project Core Research Team (CRT)", challenge: "No designated research team exists, leading to a lack of accountability. Excessive workload falls on a single individual. Designated members do not work on the project, burdening others. Different responsibilities are handled by different people, preventing a comprehensive study understanding. Lack of clarity on team composition from the start.", solution: "Establish a dedicated Project Core Research Team (CRT) at project inception, clearly defining roles, responsibilities, and reporting lines for each member, including a senior researcher for oversight. Implement a RACI matrix to ensure accountability and prevent diffused responsibilities.", type: "People/Process", ownership: "Research Management, Project Manager" },
-    { category: "Conceptualization & Planning", step: "Initial presentation summarising the Concept Proposal", challenge: "Many core members don't have access to key documents before meetings. Members joining mid-project lack orientation. Extensive deviation from the approved research proposal occurs. Terminologies and objectives are open to individual interpretation.", solution: "Implement a centralized document management system to ensure all core members have access to key documents. Develop and implement a standardized onboarding program for new team members. Establish a strict change control process for any deviation from the approved proposal to maintain project focus and clarity.", type: "Process/People", ownership: "Research Operations, Project Manager" },
-    { category: "Conceptualization & Planning", step: "Initial Kick-off and Planning/Conceptualisation Meeting", challenge: "A study's focus is diluted by trying to test too many innovations. The initial kick-off meeting either doesn't happen or lacks structured planning. Persistent misalignment between organizational vision and project deliverables.", solution: "Define a clear project scope and prioritize objectives using a scope management plan. Mandate a formal project kick-off meeting with a predefined agenda and actionable conclusions. Ensure continuous alignment through regular reviews with senior leadership and a robust communication plan.", type: "Process", ownership: "Project Manager, Senior Leadership" },
-    { category: "Conceptualization & Planning", step: "Detailed budget adaptation and circulation with key members", challenge: "Young team members experience confusion and lack of clarity. There is no mechanism for constructive, tangible feedback to refine plans.", solution: "Implement a structured mentorship program for junior team members to clarify roles and responsibilities. Establish a formal feedback mechanism for all project deliverables, facilitating structured review sessions for plan refinement.", type: "People", ownership: "HR, Research Management" },
+    { category: "Conceptualization & Planning", step: "Formation of Interim Project Core Research Team (CRT)", challenge: "No designated research team exists, leading to a lack of accountability. Excessive workload falls on a single individual. Designated members do not work on the project, burdening others. Different responsibilities are handled by different people, preventing a comprehensive study understanding. Lack of clarity on team composition from the start. Many core members don't have access to key documents before meetings. Members joining mid-project lack orientation.", solution: "Establish a dedicated Project Core Research Team (CRT) at project inception, clearly defining roles, responsibilities, and reporting lines for each member, including a senior researcher for oversight. Implement a RACI matrix to ensure accountability and prevent diffused responsibilities. Implement a centralized document management system to ensure all core members have access to key documents. Develop and implement a standardized onboarding program for new team members.", type: "People/Process", ownership: "Research Management, Project Manager" },
+    { category: "Conceptualization & Planning", step: "Initial presentation summarising the Concept Proposal", challenge: "Extensive deviation from the approved research proposal occurs. Terminologies and objectives are open to individual interpretation. A study's focus is diluted by trying to test too many innovations.", solution: "Establish a strict change control process for any deviation from the approved proposal to maintain project focus and clarity. Define a clear project scope and prioritize objectives using a scope management plan.", type: "Process/People", ownership: "Research Operations, Project Manager, Senior Leadership" },
+    { category: "Conceptualization & Planning", step: "Initial Kick-off and Planning/Conceptualisation Meeting", challenge: "The initial kick-off meeting either doesn't happen or lacks structured planning. Persistent misalignment between organizational vision and project deliverables. Young team members experience confusion and lack of clarity. There is no mechanism for constructive, tangible feedback to refine plans.", solution: "Mandate a formal project kick-off meeting with a predefined agenda and actionable conclusions. Ensure continuous alignment through regular reviews with senior leadership and a robust communication plan. Implement a structured mentorship program for junior team members to clarify roles and responsibilities. Establish a formal feedback mechanism for all project deliverables, facilitating structured review sessions for plan refinement.", type: "Process/People", ownership: "Project Manager, Senior Leadership, HR, Research Management" },
     { category: "Introduction of PMS", step: "Assign an Interim/ Permanent Project Manager (PM)", challenge: "Not recruiting or dedicating a project manager at the start of the study causes delays and complicates streamlining efforts later.", solution: "Implement a policy for mandatory Project Manager (PM) assignment at the project's initiation to ensure immediate leadership and accountability. If a permanent PM cannot be immediately recruited, an interim PM must be formally designated with clear responsibilities and a handover plan.", type: "People/Process", ownership: "Senior Leadership, HR" },
     { category: "Introduction of PMS", step: "Expand Detailed Timeline with Priority Categorization", challenge: "PMs create timelines from scratch, wasting time. Unachievable milestones are set when projects are already delayed. Lack of prioritization leads to narrow deadlines for PMs while submitted reports remain unreviewed.", solution: "Develop and enforce the use of standardized Gantt chart templates for efficient timeline creation. Conduct thorough feasibility assessments for all milestones to ensure attainability. Implement a clear prioritization framework and establish formal review processes with Service Level Agreements (SLAs) for timely report review.", type: "Process", ownership: "Project Manager, Research Management" },
     { category: "Introduction of PMS", step: "Introduction & Orientation to PMS", challenge: "PMS orientation is limited to select teams or only PMs. Lack of accessible documentation leads to repetitive queries and difficulties for mid-project joiners.", solution: "Mandate comprehensive Project Management System (PMS) orientation for all project stakeholders, not just PMs. Ensure all training sessions are recorded and develop comprehensive, accessible user manuals and FAQs within the PMS to reduce repetitive queries and facilitate onboarding.", type: "Process/People", ownership: "Research Operations, Technology, HR" },
-    { category: "Introduction of PMS", step: "Initiate PMS and Conduct Weekly System Reviews", challenge: "Multiple document versions cause confusion and errors. Locating or accessing files is challenging, especially during handovers. No system ensures timely uploading of all files, leading to incomplete documentation.", solution: "Implement strict version control protocols and standardized file naming conventions within the PMS. Establish a well-organized, searchable shared document repository. Delegate document management responsibilities to a 'document holder' within each team to ensure timely and complete documentation.", type: "Process/Technology", ownership: "Technology, Research Operations" },
-    { category: "Detailed Budget Adaptation", step: "Categorize Budget into 'Negotiable' and 'Locked Zones", challenge: "Project budgets overlook contingencies for delays. Staffing budgets do not reflect ground realities, forcing PMs to operate with inadequate personnel.", solution: "Collaborate with finance and leadership to develop an adaptive budget with contingency allocations to mitigate financial risks. Regularly review and adjust staffing budgets to reflect actual project needs and ensure adequate resource allocation.", type: "Process", ownership: "Finance, Project Manager, Senior Leadership" },
-    { category: "Detailed Budget Adaptation", step: "Plan for excess or exhausted budget", challenge: "PMs are often unaware of the submitted budget. PMs’ suggestions for cost optimization are overlooked. Lack of transparency between PMs and finance on budget utilization.", solution: "Fully inform and involve PMs in the budget planning process. Empower PMs with a framework for budget flexibility and clear guidelines for cost optimization suggestions. Establish a transparent communication protocol with the finance department, including regular budget review meetings, to ensure effective financial oversight.", type: "People/Process", ownership: "Project Manager, Finance" },
-    { category: "Detailed Budget Adaptation", step: "Utilise a budgeting software", challenge: "Lack of an integrated budgeting and reimbursement system limits real-time visibility on fund utilization, causing delays and making tracking difficult.", solution: "Advocate for and implement an integrated budgeting and reimbursement software linked to the PMS for real-time fund utilization tracking and streamlined reimbursements, enhancing financial control and efficiency.", type: "Technology/Process", ownership: "Technology, Finance" },
-    { category: "Team Recruitment Process", step: "Screening and hiring process", challenge: "PMs are overloaded with JD preparation, CV screening, and interviewing, leading to extreme delays in hiring and onboarding.", solution: "Collaborate with HR to streamline the recruitment process. Core HR functions (JD preparation, CV screening) should be managed by HR with clear Service Level Agreements (SLAs) for hiring timelines to reduce PM workload and accelerate talent acquisition.", type: "People/Process", ownership: "HR, Research Operations" },
-    { category: "Team Recruitment Process", step: "Interview & Selection process", challenge: "Required team members are not hired even after the project has started. Vacancies as per budget remain unfilled until the project's conclusion. Staffing levels are inconsistent across studies.", solution: "Implement a proactive staffing plan to ensure all required team members are hired and onboarded before project commencement. Implement a standardized resource allocation model across all projects to ensure consistent and adequate staffing levels.", type: "People/Process", ownership: "HR, Research Management" },
-    { category: "Team Recruitment Process", step: "On-boarding process", challenge: "PMs manually screen CVs in Excel. Final round interviews are frequently delayed due to other priorities.", solution: "Advocate for and integrate AI-powered recruitment tools for initial CV screening to improve efficiency. Prioritize final round interviews as critical path activities, communicating urgency to leadership to prevent hiring delays.", type: "Process/Technology", ownership: "HR, Technology, Senior Leadership" },
-    { category: "Team Recruitment Process", step: "Conduct a meeting for PMs to discuss with team members about the roles and responsibilities", challenge: "Individuals are recruited without adequate knowledge of their position or training. Lack of a standardized onboarding mechanism leads to delays and potential attrition.", solution: "Implement a rigorous pre-employment assessment and a comprehensive, standardized onboarding program. This program should include detailed job descriptions, clear expectations, and a RACI matrix to minimize confusion and reduce attrition.", type: "People/Process", ownership: "HR, Research Operations" },
-    { category: "Protocol, Tools & ICF Development", step: "Comprehensive literature review for protocol/tool modification", challenge: "Protocol and tool development is often initiated too late. The entire protocol is drafted by a single individual, lacking peer review, leading to frequent post-submission changes and IEC amendments.", solution: "Integrate protocol and tool development into early project planning to avoid delays. Implement a collaborative drafting process with mandated peer reviews at various stages to ensure quality and reduce post-submission changes and IEC amendments.", type: "Process", ownership: "Research, Project Manager" },
-    { category: "Protocol, Tools & ICF Development", step: "Development & Expansion, Modifications", challenge: "Lack of organizational AI subscriptions results in generalized documents. Reviewing documents independently instead of on collaborative platforms causes feedback tracking issues. Review meetings are irregular and reactive.", solution: "Advocate for organizational AI tool subscriptions to enhance document quality. Mandate the use of collaborative document editing platforms for streamlined feedback tracking. Establish a regular schedule for proactive review meetings with structured agendas to ensure timely and effective discussions.", type: "Process/Technology", ownership: "Technology, Research Operations, Project Manager" },
-    { category: "Protocol, Tools & ICF Development", step: "Finalisation of draft & Approval for IEC Submission", challenge: "Subject matter experts are often unavailable or not identified in time. Inputs from Site PIs/technical experts are taken at the last stage. Junior members often lack guidance.", solution: "Proactively identify and secure Subject Matter Expert (SME) commitment early in the planning phase. Organize co-development workshops with Principal Investigators (PIs) and technical experts. Implement a formal mentorship program for junior members to provide timely guidance and support.", type: "People", ownership: "Research, Research Management, Program Impact & Community Partnership" },
-    { category: "Protocol, Tools & ICF Development", step: "Site directory formation", challenge: "Standardized templates are not maintained organization-wide. Tasks are assigned without defined ownership or follow-up mechanisms.", solution: "Champion the development of a central library of standardized templates for consistency. For every task, clearly define ownership and establish a follow-up mechanism within the project management system to ensure accountability and progress tracking.", type: "Process", ownership: "Research Operations, Project Manager" },
-    { category: "Formation of Expert Committees", step: "DSMB. TAG & Steering Committee Formation (For RCTs)", challenge: "Delayed identification and onboarding of committee members (DSMB, TAG) leads to delays in resolving critical events. Enrollment sometimes starts before the committee is even finalized.", solution: "Proactively identify and onboard expert committee members (DSMB, TAG) during the conceptualization phase to prevent project delays. Maintain an updated organizational roster of potential experts to facilitate rapid committee formation and ensure timely oversight for critical events.", type: "People/Process", ownership: "Research, Senior Leadership, Research Management" },
-    { category: "Formation of Expert Committees", step: "Study Task Force (Internal & External)", challenge: "Roles and responsibilities for committee members are not clearly outlined. Timelines are frequently missed by members, and reviews do not occur within stipulated windows.", solution: "Develop and disseminate standardized guidelines outlining clear roles, responsibilities, and expected deliverables for all committee members. Establish and enforce strict timelines for reviews and implement a tracking mechanism to ensure compliance.", type: "Process", ownership: "Research Management, Project Manager" },
-    { category: "Site Selection", step: "Facility Assessment & final site list generation", challenge: "Site selection is often finalized arbitrarily without proper feasibility assessment, leading to wasted time and delays. Site assessments are unstructured and inconsistent.", solution: "Implement a rigorous, data-driven site feasibility assessment process before final selection to optimize resource allocation and prevent delays. Standardize the site evaluation process across all sites with consistent guidance and criteria for objective assessment.", type: "Process", ownership: "Research Operations, Research Management" },
+    { category: "Introduction of PMS", step: "Organize Shared Document Repository", challenge: "Multiple document versions cause confusion and errors. Locating or accessing files is challenging, especially during handovers. No system ensures timely uploading of all files, leading to incomplete documentation.", solution: "Implement strict version control protocols and standardized file naming conventions within the PMS. Establish a well-organized, searchable shared document repository. Delegate document management responsibilities to a 'document holder' within each team to ensure timely and complete documentation.", type: "Process/Technology", ownership: "Technology, Research Operations" },
+    { category: "Detailed Budget Adaptation", step: "Detailed budget adaptation and circulation with key members", challenge: "Project budgets overlook contingencies for delays. Staffing budgets do not reflect ground realities, forcing PMs to operate with inadequate personnel. PMs are often unaware of the submitted budget.", solution: "Collaborate with finance and leadership to develop an adaptive budget with contingency allocations to mitigate financial risks. Regularly review and adjust staffing budgets to reflect actual project needs and ensure adequate resource allocation. Fully inform and involve PMs in the budget planning process.", type: "People/Process", ownership: "HR, Research Management, Finance, Project Manager, Senior Leadership" },
+    { category: "Detailed Budget Adaptation", step: "Categorize Budget into 'Negotiable' and 'Locked Zones'", challenge: "PMs’ suggestions for cost optimization are overlooked.", solution: "Empower PMs with a framework for budget flexibility and clear guidelines for cost optimization suggestions.", type: "Process", ownership: "Project Manager, Finance, Senior Leadership" },
+    { category: "Detailed Budget Adaptation", step: "Plan for excess or exhausted budget", challenge: "Lack of transparency between PMs and finance on budget utilization.", solution: "Establish a transparent communication protocol with the finance department, including regular budget review meetings, to ensure effective financial oversight.", type: "Process/People", ownership: "Finance, Project Manager" },
+    { category: "Detailed Budget Adaptation", step: "Utilise a budgeting software", challenge: "Lack of an integrated budgeting and reimbursement system limits real-time visibility on fund utilization, causing delays and making tracking difficult.", solution: "Implement an integrated budgeting and reimbursement software that provides real-time visibility into fund utilization. This system should streamline financial tracking, automate reporting, and facilitate efficient reimbursement processes to prevent delays and improve financial oversight.", type: "Technology/Process", ownership: "Technology, Finance, Project Manager" },
+    { category: "Team Recruitment Process", step: "Screening and hiring process", challenge: "PMs are overloaded with JD preparation, CV screening, and interviewing, leading to extreme delays in hiring and onboarding. Required team members are not hired even after the project has started. Vacancies as per budget remain unfilled until the project's conclusion. Staffing levels are inconsistent across studies.", solution: "Collaborate with HR to streamline the recruitment process. Core HR functions (JD preparation, CV screening) should be managed by HR with clear Service Level Agreements (SLAs) for hiring timelines to reduce PM workload and accelerate talent acquisition. Implement a proactive staffing plan to ensure all required team members are hired and onboarded before project commencement. Implement a standardized resource allocation model across all projects to ensure consistent and adequate staffing levels.", type: "People/Process", ownership: "HR, Research Operations, Research Management" },
+    { category: "Team Recruitment Process", step: "Interview & Selection process", challenge: "PMs manually screen CVs in Excel. Final round interviews are frequently delayed due to other priorities.", solution: "Advocate for and integrate AI-powered recruitment tools for initial CV screening to improve efficiency. Prioritize final round interviews as critical path activities, communicating urgency to leadership to prevent hiring delays.", type: "People/Process/Technology", ownership: "HR, Technology, Senior Leadership" },
+    { category: "Team Recruitment Process", step: "On-boarding process", challenge: "Individuals are recruited without adequate knowledge of their position or training. Lack of a standardized onboarding mechanism leads to delays and potential attrition.", solution: "Implement a rigorous pre-employment assessment and and a comprehensive, standardized onboarding program. This program should include detailed job descriptions, clear expectations, and a RACI matrix to minimize confusion and reduce attrition.", type: "People/Process", ownership: "HR, Research Operations" },
+    {
+        category: "Protocol, Tools & ICF Development",
+        step: "Comprehensive literature review for protocol/tool modification",
+        challenge: "Protocol and tool development is often initiated too late. The entire protocol is drafted by a single individual, lacking peer review, leading to frequent post-submission changes and IEC amendments. Lack of organizational AI subscriptions results in generalized documents. Reviewing documents independently instead of on collaborative platforms causes feedback tracking issues. Review meetings are irregular and reactive. Subject matter experts are often unavailable or not identified in time.",
+        solution: "Integrate protocol and tool development into early project planning to avoid delays. Implement a collaborative drafting process with mandated peer reviews at various stages to ensure quality and reducereduce post-submission changes and IEC amendments. Advocate for organizational AI tool subscriptions to enhance document quality. Mandate the use of collaborative document editing platforms for streamlined feedback tracking. Establish a regular schedule for proactive review meetings with structured agendas to ensure timely and effective discussions. Proactively identify and secure Subject Matter Expert (SME) commitment early in the planning phase.",
+        type: "Process/Technology/People",
+        ownership: "Research, Project Manager, Technology, Research Operations, Research Management, Program Impact & Community Partnership"
+    },
+    {
+        category: "Protocol, Tools & ICF Development",
+        step: "Development & Expansion, Modifications",
+        challenge: "Inputs from Site PIs/technical experts are taken at the last stage. Junior members often lack guidance. Standardized templates are not maintained organization-wide.",
+        solution: "Organize co-development workshops with Principal Investigators (PIs) and technical experts. Implement a formal mentorship program for junior members to provide timely guidance and support. Champion the development of a central library of standardized templates for consistency.",
+        type: "People/Process",
+        ownership: "Research, Research Management, Program Impact & Community Partnership, Research Operations, Project Manager"
+    },
+    {
+        category: "Protocol, Tools & ICF Development",
+        step: "Finalisation of draft & Approval for IEC Submission",
+        challenge: "Reviews for final drafts often take over 4 months due to limited bandwidth, and review timelines are not consistently enforced, leading to overlapping responsibilities and additional delays. The approval process is currently over-reliant on a single senior-level member, causing excessive workload and significant bottlenecks. There is a general lack of clarity regarding who has the authority to finalize specific documents or make critical decisions. Major modifications to project elements like selected study sites, intervention delivery, or team structure frequently lead to multiple, late-stage amendments across various ethical and regulatory approval boards. Furthermore, inconsistent communication from the Principal Investigator (PI) site regarding updates or changes to the funder results in project delays and places an undue burden on the Project Manager to prepare justification reports while the project faces potential freezes from the funder.",
+        type: "Process/People",
+        ownership: "Research Management, Project Manager, Senior Leadership, Research Operations, Finance"
+    },
+    { category: "Formation of Expert Committees", step: "DSMB. TAG & Steering Committee Formation (For RCTs)", challenge: "Delayed identification and onboarding of committee members (DSMB, TAG) leads to delays in resolving critical events. Enrollment sometimes starts before the committee is even finalized. Roles and responsibilities for committee members are not clearly outlined. Timelines are frequently missed by members, and reviews do not occur within stipulated windows.", solution: "Proactively identify and onboard expert committee members (DSMB, TAG) during the conceptualization phase to prevent project delays. Maintain an updated organizational roster of potential experts to facilitate rapid committee formation and ensure timely oversight for critical events. Develop and disseminate standardized guidelines outlining clear roles, responsibilities, and expected deliverables for all committee members. Establish and enforce strict timelines for reviews and implement a tracking mechanism to ensure compliance.", type: "People/Process", ownership: "Research, Senior Leadership, Research Management, Project Manager" },
+    {
+        category: "Formation of Expert Committees",
+        step: "Study Task Force",
+        challenge: "The Study Task Force often operates primarily at junior levels without adequate senior leadership involvement, leading to a lack of strategic direction. It frequently becomes inactive post-establishment, losing its intended purpose. Despite its efficiency at project manager and director levels, this success is not consistently replicated across the organization.",
+        solution: "Mandate and formalize senior leadership and subject matter expert participation within the Study Task Force, clearly defining their roles to ensure strategic oversight and guidance. Establish a clear charter with measurable objectives and implement structured, regular meetings with robust action item tracking to ensure consistent functionality and prevent loss of purpose. Document and disseminate the successful operational models from the project manager and director levels as best practices to foster organization-wide consistency and effectiveness.",
+        type: "People/Process",
+        ownership: "Research Management, Project Manager, Senior Leadership"
+    },
+    { category: "Site Selection", step: "Facility Assessment & final site list generation", challenge: "Site selection is often finalized arbitrarily without proper feasibility assessment, leading to wasted time and delays. Site assessments are unstructured and consistent.", solution: "Implement a rigorous, data-driven site feasibility assessment process before final selection to optimize resource allocation and prevent delays. Standardize the site evaluation process across all sites with consistent guidance and criteria for objective assessment.", type: "Process", ownership: "Research Operations, Research Management" },
     { category: "Site Selection", step: "Communication with potential collaborators & stakeholders", challenge: "A concise organizational one-pager is not available for external partners. There is no database of already partnered sites, necessitating re-doing feasibility assessments.", solution: "Ensure a concise, up-to-date organizational one-pager is readily available for external partners to streamline initial communications. Advocate for and utilize an organizational data bank for partnered sites, including structured feasibility data, to avoid redundant assessments.", type: "Technology/Process", ownership: "Program Impact & Community Partnership, Research Operations, Technology" },
-    { category: "Approvals & Compliance", step: "IEC approvals", challenge: "Protocols and instruments aren't approved until the last minute before filing. Time-consuming printing and filing are also done at the last minute. CVs of key team members are not centrally stored or updated.", solution: "Establish strict internal review schedules well in advance of submission deadlines for protocols and instruments. Allocate dedicated administrative support for printing and filing. Establish a central, routinely updated repository for CVs of key team members to ensure compliance readiness.", type: "Process", ownership: "Administration, Research Operations" },
-    { category: "Approvals & Compliance", step: "MoUs signed with participating sites", challenge: "Queries are answered by senior members due to insufficient time for junior members. Fee payments are delayed. PMs prepare MoUs that face review delays. Required regulatory approvals are identified late.", solution: "Implement a capacity-building program for junior members to handle queries efficiently. Streamline payment mechanisms to avoid delays. Utilize standardized MoU templates with clear review timelines. Conduct a comprehensive regulatory landscape analysis at the project's outset to identify all required approvals early.", type: "People/Process", ownership: "HR, Finance, Research Operations, Project Manager" },
+    {
+        category: "Approvals & Compliance",
+        step: "IEC approvals",
+        challenge: "Protocols and instruments aren't approved until the last minute before filing. Time-consuming printing and filing are also done at the last minute. CVs of key team members are not centrally stored or updated. Queries are answered by senior members due to insufficient time for junior members. Fee payments are delayed.",
+        solution: "Establish strict internal review schedules well in advance of submission deadlines for protocols and instruments. Allocate dedicated administrative support for printing and filing. Establish a central, routinely updated repository for CVs of key team members to ensure compliance readiness. Implement a capacity-building program for junior members to handle queries efficiently. Streamline payment mechanisms to avoid delays.",
+        type: "Process/People",
+        ownership: "Administration, Research Operations, HR, Finance"
+    },
+    {
+        category: "Approvals & Compliance",
+        step: "MoUs signed with participating sites",
+        challenge: "PMs prepare MoUs that face review delays.",
+        solution: "Utilize standardized MoU templates with clear review timelines. Conduct a comprehensive regulatory landscape analysis at the project's outset to identify all required approvals early.",
+        type: "People/Process",
+        ownership: "Research Operations, Project Manager"
+    },
+    {
+        category: "Approvals & Compliance",
+        step: "Securing Regulatory Approvals",
+        challenge: "In the middle of the study when the need arises we realize that for this particular study we will require other regulatory approvals as well, making it difficult to apply and get the approvals at last moment, resulting in delays in initiating the study. eg. for iKMC study HMSC approval was required and was conveyed very late, and the approval aslo took time to come so we were not able to initiate formative research(qualitative research) hence delaying the project timeline. Not all the PMs who have taken regulatory approvals in previous trials manage records of all the required documents, thus for every new approval, the new PM have to do all the work from scratch resulting in usage of additional time to complete the task. Members who have been involved in previous regulatory submissions are expected to support the compliance process on adhoc basis, even if there is no knowledge/ involvement in project. PMs have to be dependent on the people who have access to the credentials to check for any updates or complete any tasks on such portals. These reviews takes time thus the timeline for completing such tasks gets delayed. Query response takes long time due to dependency on the availability of senior team members",
+        type: "Process/People/Technology",
+        ownership: "Research Operations, Project Manager, Technology, Senior Leadership, Research Management"
+    },
     { category: "Pre-Implementation Setup", step: "CRFs and PISs review and finalization", challenge: "Tools are finalized in silos without comprehensive input. PMs cannot find reference materials as shared portals are not maintained. Delays in timely reviews and decision-making for CRFs and PISs.", solution: "Mandate a collaborative tool finalization process involving all stakeholders to ensure comprehensive input. Enforce a policy for all PMs to maintain a shared documentation portal for easy access to reference materials. Organize 'workathon' meetings for real-time consensus and accelerate reviews and decision-making.", type: "Process", ownership: "Project Manager, Technology, Research Operations" },
     { category: "Pre-Implementation Setup", step: "Tools REDCap configured and tested", challenge: "Proper SOPs are not available at the study's beginning. The entire responsibility of drafting SOPs falls on PMs, who may lack subject expertise. Pilot test learnings are not effectively integrated.", solution: "Prioritize SOP development early in the study, co-developing them with subject experts to ensure accuracy and completeness. Champion a central expert team to create common SOPs for organizational consistency. Rigorously integrate pilot test learnings into the main study protocol to refine processes before full implementation.", type: "People/Process", ownership: "Research Operations, Research Management, Project Manager" },
     { category: "Training & Field Readiness", step: "Staff Training sessions", challenge: "Subject matter experts are not identified or made available in time. PMs are left to create training agendas alone, which may lack depth. PMs lead training sessions alone due to expert unavailability.", solution: "Proactively identify and secure Subject Matter Expert (SME) commitment for training sessions. Mandate leadership review and co-development of training materials to ensure depth and relevance. Ensure SMEs are available to co-lead sessions, leveraging their expertise effectively.", type: "People", ownership: "HR, Research Management, Program Impact & Community Partnership" },
     { category: "Training & Field Readiness", step: "Team standardisation", challenge: "New PMs struggle to anticipate logistical needs due to no standard formats. Admin/Finance teams depend on PMs for exhaustive input without guidance. Admin arrangements are reactive and uncoordinated.", solution: "Develop standardized formats and checklists for logistical planning to support new PMs. Establish clear guidelines and templates for Admin/Finance input requirements. Implement a proactive administrative support plan for all training logistics to ensure coordinated and efficient arrangements.", type: "Process", ownership: "Administration, Project Manager, Finance" },
     { category: "Quality Assurance Protocol & Execution", step: "Development of SOP/ Protocol for QA", challenge: "Subject experts are often occupied, limiting their contribution to QA. Each team operates based on individual past experiences, leading to inconsistent practices.", solution: "Proactively schedule and secure dedicated time from subject experts for Quality Assurance (QA) activities. Develop and enforce organization-wide standardized QA protocols and templates to ensure consistent and high-quality practices across all teams.", type: "People/Process", ownership: "Research Management, Project Manager" },
     { category: "Implementation & Monitoring", step: "Site preparedness(Construction), Equipment and logistics procured", challenge: "Inadequate sitting arrangements and lack of space at sites. Recruitment is not done even after implementation has started. No fixed senior member is appointed for guidance.", solution: "Conduct a detailed site readiness assessment, including infrastructure and space, before implementation. Ensure all personnel are hired and deployed before implementation begins. Advocate for a dedicated senior point person for guidance and issue resolution at each site.", type: "Process", ownership: "Research Operations, HR, Project Manager" },
-    { category: "Implementation & Monitoring", step: "Participant Recruitment", challenge: "Meetings are not held before recruitment begins. Clear intervention delivery protocols are not prepared or shared. Timely inputs from senior members for co-design workshops are often missing.", solution: "Mandate a pre-recruitment kick-off meeting to align all stakeholders. Ensure clear, written intervention protocols are disseminated before implementation. Establish a formal feedback loop with clear deadlines for senior team inputs for co-design workshops, ensuring timely strategic guidance.", type: "People/Process", ownership: "Project Manager, Research, Research Operations" },
+    { category: "Implementation & Monitoring", step: "Participant Recruitment", challenge: "No meetings before recruitment. Clear intervention delivery protocols are not prepared or shared. Timely inputs from senior members for co-design workshops are often missing.", solution: "Mandate a pre-recruitment kick-off meeting to align all stakeholders. Ensure clear, written intervention protocols are disseminated before implementation. Establish a formal feedback loop with clear deadlines for senior team inputs for co-design workshops, ensuring timely strategic guidance.", type: "People/Process", ownership: "Project Manager, Research, Research Operations" },
     { category: "Data Collection, Management & Analysis", step: "Data Collection", challenge: "Conflict between organizational goals and protocol objectives creates confusion. Qualitative research is siloed with no cross-learning opportunities.", solution: "Facilitate a clear definition of the project's scope and objectives to resolve internal conflicts and ensure alignment. Organize cross-project brainstorming meetings and knowledge-sharing sessions for qualitative researchers to foster collaboration and cross-learning opportunities.", type: "Process/People", ownership: "Project Manager, Research, Research Operations" },
     { category: "Data Collection, Management & Analysis", step: "Data Analysis, Management & Sharing Plan formation", challenge: "PMs without prior qualitative experience are expected to manage these tasks. Lack of confidence and guidance among young freshers with no mechanism for skill-building.", solution: "Ensure PMs assigned to qualitative data tasks receive adequate training and mentorship in qualitative methodologies. Establish a formal mentorship program for young researchers, complemented by a repository of self-learning materials, to build confidence and skills.", type: "People", ownership: "Research Management, HR, Project Manager" },
     { category: "Dissemination & Publication", step: "Internal dissemination to study team", challenge: "A 'plurality of instructions and guidance' makes execution difficult. Manuscript drafts remain in review for up to 6 months, leading to a lack of motivation.", solution: "Establish a single, clear source of guidance and standard operating procedures for manuscript writing. Implement strict review timelines (e.g., 2-4 weeks) with a formal process and accountability to prevent prolonged delays and maintain team motivation.", type: "Process/People", ownership: "Research Management, Project Manager" },
@@ -155,11 +258,322 @@ const projectData = [
     { category: "Scale-Up Planning", step: "Consultations with health system / govt", challenge: "Stakeholder mapping and liaisoning with the health system often occur too late, delaying government official onboarding for MoUs and co-designing for scale.", solution: "Initiate stakeholder mapping and liaisoning with the health system and government well in advance of scale-up planning. Proactive engagement with government officials is crucial for securing necessary Memoranda of Understanding (MoUs) and facilitating co-design workshops for successful scale-up.", type: "People/Process", ownership: "Program Impact & Community Partnership, Senior Leadership, Project Manager" }
 ];
 
+// Helper function to extract and format challenges/solutions as list items
+function formatAsList(text) {
+    if (!text) return '<span class="text-gray-500 italic">N/A</span>';
+    const items = text.split(/\.\s*(?=[A-Z])|\;\s*(?=[A-Z])/).filter(s => s.trim() !== '');
+    if (items.length === 0) return '<span class="text-gray-500 italic">N/A</span>';
+    return `<ul>${items.map(item => `<li>${item.trim() + (item.endsWith('.') ? '' : '.')}</li>`).join('')}</ul>`;
+}
+
+// Unified color palette for consistency across all charts and tags
+const challengeTypeColors = {
+    'People': { background: '#FDE6D4', border: '#D4804E' },
+    'Process': { background: '#d1c4e9', border: '#311b92' },
+    'Technology': { background: '#c8e6c9', border: '#1b5e20' },
+    'People + Process': { background: '#ffe0b2', border: '#e65100' },
+    'People + Technology': { background: '#d1c4e9', border: '#311b92' },
+    'Process + Technology': { background: '#c8e6c9', border: '#1b5e20' },
+    'People + Process + Technology': { background: '#a7d9b9', border: '#004d40' },
+    'Mixed': { background: '#b0bec5', border: '#263238' },
+    'All': { background: '#e0e0e0', border: '#607d8b'}
+};
+
+function getChallengeType(typeString) {
+    const types = typeString.toLowerCase().split('/').map(s => s.trim());
+    types.sort();
+
+    if (types.includes('people') && types.includes('process') && types.includes('technology')) return 'People + Process + Technology';
+    if (types.includes('people') && types.includes('process')) return 'People + Process';
+    if (types.includes('people') && types.includes('technology')) return 'People + Technology';
+    if (types.includes('process') && types.includes('technology')) return 'Process + Technology';
+    if (types.includes('people')) return 'People';
+    if (types.includes('process')) return 'Process';
+    if (types.includes('technology')) return 'Technology';
+    
+    return 'Mixed';
+}
+
+// Dynamically generate content for the "People vs Process Challenges" page
+const generatePeopleVsProcessDetailedContent = () => {
+    const detailedContent = [];
+    projectData.forEach(item => {
+        const challengesArray = item.challenge.split(/\.\s*(?=[A-Z])/).filter(s => s.trim() !== '');
+        // const solutionsArray = item.solution.split(/\.\s*(?=[A-Z])|\;\s*(?=[A-Z])/).filter(s => s.trim() !== ''); // Not directly used here, but good to keep in mind
+
+        challengesArray.forEach((challenge) => { // Removed index as it's not needed here
+            const challengeType = getChallengeType(item.type);
+            let techCanSolve = "General project management software can help track tasks.";
+            let techCannotSolve = "Requires human decision-making and direct intervention.";
+
+            // Specific analysis based on the challenge content
+            if (challenge.includes("No designated research team exists") || challenge.includes("lack of accountability")) {
+                techCanSolve = "Project management systems can track individual task assignments and progress, facilitating accountability reporting.";
+                techCannotSolve = "Technology cannot *create* a sense of accountability or the initial designation of a team; this requires human leadership and organizational structure.";
+            } else if (challenge.includes("Excessive workload falls on a single individual")) {
+                techCanSolve = "Resource management software can visualize workload distribution and identify over-allocated resources. Automation tools can reduce repetitive manual tasks.";
+                techCannotSolve = "Technology cannot directly change management's tendency to overload individuals or improve delegation skills. Human intervention is needed to act on the insights.";
+            } else if (challenge.includes("Members joining mid-project lack orientation") || challenge.includes("Many core members don't have access to key documents")) {
+                techCanSolve = "A centralized document management system ensures easy access to all key documents. E-learning platforms can deliver standardized onboarding and orientation programs.";
+                techCannotSolve = "Technology cannot replace human mentorship, direct Q&A, or the personal connection vital for effective onboarding and team integration.";
+            } else if (challenge.includes("Extensive deviation from the approved research proposal")) {
+                techCanSolve = "Workflow management systems can enforce strict change control processes, requiring digital approvals for any deviation. Version control systems track all changes to documents.";
+                techCannotSolve = "Technology cannot prevent deliberate circumvention of processes or a lack of discipline in following established change control. Human adherence and oversight are crucial.";
+            } else if (challenge.includes("PMs create timelines from scratch")) {
+                techCanSolve = "Project management software with built-in Gantt chart templates and automation features can generate timelines rapidly, standardizing the process and saving time.";
+                techCannotSolve = "Technology cannot guarantee *realistic* or *accurate* initial estimates if the human input (e.g., task durations, dependencies) is flawed or based on unrealistic expectations.";
+            } else if (challenge.includes("Lack of an integrated budgeting and reimbursement system")) {
+                techCanSolve = "Integrated budgeting and financial management software can centralize data, automate expense tracking, and provide real-time dashboards for fund utilization.";
+                techCannotSolve = "Technology cannot resolve underlying policy conflicts between departments (e.g., finance and project teams) or ensure timely data entry by all users if there's resistance or lack of training.";
+            } else if (challenge.includes("PMs manually screen CVs in Excel") || challenge.includes("Final round interviews are frequently delayed")) {
+                techCanSolve = "AI-powered recruitment tools can automate initial CV screening. Calendar management and video conferencing tools streamline interview scheduling and execution.";
+                techCannotSolve = "Technology cannot assess soft skills, cultural fit, or conduct nuanced interviews that require human judgment. Prioritizing interviews still needs leadership commitment.";
+            } else if (challenge.includes("Protocols and instruments aren't approved until the last minute") || challenge.includes("Time-consuming printing and filing")) {
+                techCanSolve = "Workflow automation with digital approval chains can expedite reviews. E-signature capabilities and digital archiving eliminate manual printing and filing.";
+                techCannotSolve = "Technology cannot instill foresight or proactive planning in teams. The initial delay in starting the approval process is a human/organizational issue.";
+            } else if (challenge.includes("No system ensures timely uploading of all files")) {
+                techCanSolve = "Document management systems with automated reminders, audit trails, and mandatory fields can prompt and track timely file uploads.";
+                techCannotSolve = "Technology cannot force users to upload files if there's a lack of discipline or understanding of the importance. Human responsibility and enforcement are key.";
+            } else if (challenge.includes("Lack of accessible documentation leads to repetitive queries")) {
+                techCanSolve = "Centralized knowledge bases, FAQs, and search functionalities within a PMS can make documentation easily accessible and reduce repetitive queries.";
+                techCannotSolve = "Technology relies on humans to create and update the documentation. It cannot replace the need for clear writing, comprehensive content, or proactive knowledge sharing culture.";
+            } else if (challenge.includes("Unachievable milestones are set")) {
+                techCanSolve = "Project management software can run simulations and provide data analytics based on historical performance to assess milestone attainability.";
+                techCannotSolve = "Technology cannot prevent human over-optimism or political pressure to set unrealistic goals. Realistic planning requires human judgment and courage.";
+            } else if (challenge.includes("Lack of prioritization leads to narrow deadlines")) {
+                techCanSolve = "Project management tools can visualize critical paths and prioritize tasks based on dependencies and impact. Automated alerts can flag approaching deadlines.";
+                techCannotSolve = "Technology cannot enforce adherence to prioritization or force busy leadership to review reports if they lack the time or commitment.";
+            } else if (challenge.includes("PMS orientation is limited to select teams")) {
+                techCanSolve = "E-learning modules and centralized training resources within a PMS can be scaled to reach all project stakeholders, ensuring consistent orientation.";
+                techCannotSolve = "Technology cannot *mandate* participation or ensure comprehension if there's a lack of organizational commitment to broad training.";
+            } else if (challenge.includes("No designated research team exists, leading to a lack of accountability")) {
+                techCanSolve = "Project management systems can be used to define and assign roles with clear responsibilities, and to track progress and report on individual contributions, thereby facilitating accountability.";
+                techCannotSolve = "Technology cannot create the initial organizational structure or the leadership decision to form a dedicated team. It also cannot instill the personal sense of responsibility or dedication in team members.";
+            } else if (challenge.includes("The initial kick-off meeting either doesn't happen or lacks structured planning")) {
+                techCanSolve = "Project management software can provide templates for kick-off meeting agendas and facilitate scheduling and automated reminders. Collaborative whiteboards can structure brainstorming.";
+                techCannotSolve = "Technology cannot *force* a meeting to happen or ensure participants engage meaningfully. Leadership commitment and effective facilitation are human requirements.";
+            } else if (challenge.includes("Persistent misalignment between organizational vision and project deliverables")) {
+                techCanSolve = "Project portfolio management (PPM) software can link individual project deliverables to organizational strategic goals, providing dashboards for real-time alignment checks.";
+                techCannotSolve = "Technology cannot *create* the organizational vision or resolve fundamental disagreements on strategic direction. This requires human leadership and negotiation.";
+            } else if (challenge.includes("Young team members experience confusion and lack of clarity")) {
+                techCanSolve = "Knowledge management systems with FAQs and searchable documentation can provide immediate answers. Communication platforms can facilitate direct questions and peer support.";
+                techCannotSolve = "Technology cannot replace the nuances of human mentorship, personalized guidance, or the confidence gained from direct interaction with experienced colleagues.";
+            } else if (challenge.includes("There is no mechanism for constructive, tangible feedback")) {
+                techCanSolve = "Performance management software can provide structured feedback forms, facilitate 360-degree reviews, and track feedback implementation. Collaboration tools can enable in-document commenting.";
+                techCannotSolve = "Technology cannot ensure the *quality* of feedback or the willingness of individuals to give/receive it constructively. This relies on psychological safety and interpersonal skills.";
+            } else if (challenge.includes("Not recruiting or dedicating a project manager at the start")) {
+                techCanSolve = "HRIS (Human Resources Information Systems) can track project staffing needs and highlight vacant PM roles. Recruitment software can expedite the sourcing process.";
+                techCannotSolve = "Technology cannot *decide* to allocate a PM or fill a position if there's a lack of budget, strategic priority, or suitable candidates. These are human decisions.";
+            } else if (challenge.includes("Project budgets overlook contingencies for delays")) {
+                techCanSolve = "Financial planning software can incorporate scenario analysis and contingency budgeting models. Project management software can link budget burn-rate to schedule progress for alerts.";
+                techCannotSolve = "Technology cannot *mandate* the inclusion of contingencies if organizational policy or risk appetite dictates otherwise. This is a strategic human choice.";
+            } else if (challenge.includes("Staffing budgets do not reflect ground realities")) {
+                techCanSolve = "HR analytics and workforce planning software can provide data on actual workload and resource utilization versus budget. Simulation tools can model different staffing scenarios.";
+                techCannotSolve = "Technology provides data, but humans must interpret it and make the decision to adjust budgets and allocate personnel appropriately, often facing political or financial constraints.";
+            } else if (challenge.includes("PMs are often unaware of the submitted budget") || challenge.includes("PMs’ suggestions for cost optimization are overlooked")) {
+                techCanSolve = "Integrated financial and project management dashboards can provide real-time budget visibility to PMs. Digital suggestion boxes or collaboration platforms can capture and track cost-saving ideas.";
+                techCannotSolve = "Technology cannot build trust between PMs and finance, or ensure that leadership genuinely values and acts upon PM input. This requires organizational culture change.";
+            } else if (challenge.includes("PMs are overloaded with JD preparation, CV screening, and interviewing")) {
+                techCanSolve = "Applicant Tracking Systems (ATS) automate job posting and initial CV filtering. AI tools can assist with drafting JDs and pre-screening candidates.";
+                techCannotSolve = "Technology can streamline tasks, but the ultimate decision to redistribute workload, hire more HR staff, or empower PMs to delegate is a human management decision.";
+            } else if (challenge.includes("Required team members are not hired even after the project has started")) {
+                techCanSolve = "Recruitment tracking systems can show bottlenecks in the hiring pipeline. Workforce planning software can forecast staffing needs based on project timelines.";
+                techCannotSolve = "Technology highlights the problem, but cannot force hiring if there are budget limitations, a lack of available talent, or slow decision-making from human managers.";
+            } else if (challenge.includes("Individuals are recruited without adequate knowledge of their position or training")) {
+                techCanSolve = "Learning Management Systems (LMS) can deliver mandatory training modules. HRIS can ensure all new hires complete necessary digital paperwork and access role-specific resources.";
+                techCannotSolve = "Technology cannot ensure the *quality* of the training content, or that new hires *retain* and *apply* the knowledge. It also cannot compensate for poor job description design.";
+            } else if (challenge.includes("Protocol and tool development is often initiated too late")) {
+                techCanSolve = "Project planning software can set early milestones and automated alerts for critical document initiation. Centralized document templates can reduce start-up time.";
+                techCannotSolve = "Technology cannot change organizational inertia or a culture of procrastination. It requires human discipline to start tasks early.";
+            } else if (challenge.includes("The entire protocol is drafted by a single individual, lacking peer review")) {
+                techCanSolve = "Collaborative document editing platforms facilitate real-time co-drafting and commenting. Workflow tools can enforce peer review steps before final submission.";
+                techCannotSolve = "Technology facilitates collaboration, but cannot ensure the *engagement* or *quality* of peer review, nor can it overcome a lack of expertise within the review pool.";
+            } else if (challenge.includes("Review meetings are irregular and reactive")) {
+                techCanSolve = "Calendar management tools can schedule recurring meetings with automated invites. Collaboration platforms can maintain shared agendas and action items.";
+                techCannotSolve = "Technology cannot ensure attendance or productive discussions if participants lack commitment, time, or effective meeting facilitation skills.";
+            } else if (challenge.includes("Subject matter experts are often unavailable or not identified in time")) {
+                techCanSolve = "Skills databases or talent management systems can map available internal expertise. Automated scheduling tools can help coordinate SME availability.";
+                techCannotSolve = "Technology cannot *create* SMEs if they don't exist, or force their availability if their workload or priorities are managed elsewhere. Human negotiation is often required.";
+            } else if (challenge.includes("Inputs from Site PIs/technical experts are taken at the last stage")) {
+                techCanSolve = "Collaboration platforms can integrate PI/expert input directly into early drafting phases. Automated workflows can trigger early review cycles for specific sections.";
+                techCannotSolve = "Technology cannot overcome hierarchical barriers or a cultural tendency to involve experts only at final stages. Leadership must drive this change.";
+            } else if (challenge.includes("Junior members often lack guidance")) {
+                techCanSolve = "E-learning modules for basic guidance. Internal communication platforms for quick questions. Centralized knowledge bases for self-service learning.";
+                techCannotSolve = "Technology cannot provide personalized mentorship, tailored advice, or the psychological safety required for junior members to ask questions freely.";
+            } else if (challenge.includes("Standardized templates are not maintained organization-wide")) {
+                techCanSolve = "Centralized document management systems with version control. Dedicated portals for template storage and distribution. Automated checks for template adherence.";
+                techCannotSolve = "Technology cannot enforce the *creation* of good templates or the *willingness* of teams to adopt them if there's resistance to change or a lack of understanding.";
+            } else if (challenge.includes("Delayed identification and onboarding of committee members")) {
+                techCanSolve = "Talent management systems can identify potential committee members based on skills. Digital communication platforms can streamline outreach and onboarding processes.";
+                techCannotSolve = "Technology cannot compel individuals to join committees or expedite their internal organizational approvals. These are human and bureaucratic processes.";
+            } else if (challenge.includes("Roles and responsibilities for committee members are not clearly outlined")) {
+                techCanSolve = "Document management systems to store and distribute clear charters and role descriptions. Workflow tools can highlight role dependencies.";
+                techCannotSolve = "Technology cannot *define* these roles; that's a leadership and governance task. It also cannot ensure individuals fully *understand* or *adhere* to them.";
+            } else if (challenge.includes("Timelines are frequently missed by members, and reviews do not occur within stipulated windows.")) {
+                techCanSolve = "Project management software with automated reminders, deadline tracking, and reporting on missed milestones. Collaborative review platforms with built-in review periods.";
+                techCannotSolve = "Technology cannot enforce adherence if members are over-committed, lack discipline, or do not perceive the urgency. Human accountability and consequences are necessary.";
+            } else if (challenge.includes("Site selection is often finalized arbitrarily without proper feasibility assessment")) {
+                techCanSolve = "Data analytics tools can process site-specific data (demographics, infrastructure) to generate feasibility scores. Geospatial tools can aid in site mapping.";
+                techCannotSolve = "Technology provides data, but the decision to use it objectively and avoid arbitrary choices rests with human leadership and their commitment to evidence-based decisions.";
+            } else if (challenge.includes("Site assessments are unstructured and consistent.")) { // This phrase sounds like a typo, assuming it means "unstructured and *inconsistent*"
+                techCanSolve = "Digital forms for standardized data collection during site assessments. Workflow tools to ensure all required assessment steps are completed.";
+                techCannotSolve = "Technology cannot ensure the *integrity* of the data entered during assessments or the *honesty* of the assessors. Human training and ethics are paramount.";
+            } else if (challenge.includes("A concise organizational one-pager is not available for external partners.")) {
+                techCanSolve = "Centralized content management systems can store and distribute the latest version of the one-pager. Digital asset management tools.";
+                techCannotSolve = "Technology cannot *create* the one-pager; that's a marketing/communications task. It also cannot ensure *effective* content that resonates with partners.";
+            } else if (challenge.includes("There is no database of already partnered sites")) {
+                techCanSolve = "A CRM (Customer Relationship Management) system or a dedicated partner database can store information on past collaborations, including feasibility data.";
+                techCannotSolve = "Technology needs human input to build and maintain the database. It cannot capture qualitative insights about partnerships that aren't digitally recorded.";
+            } else if (challenge.includes("Protocols and instruments aren't approved until the last minute before filing")) {
+                techCanSolve = "Automated workflow systems can set pre-submission deadlines and send reminders. Digital submission portals can streamline the filing process.";
+                techCannotSolve = "Technology cannot compel individuals to prioritize and complete tasks ahead of time. This requires strong project discipline and adherence to processes.";
+            } else if (challenge.includes("Time-consuming printing and filing are also done at the last minute.")) {
+                techCanSolve = "Document management systems with e-signature capabilities can eliminate physical printing and filing. Digital archiving and searchable databases.";
+                techCannotSolve = "Technology can make the process digital, but cannot prevent procrastination or a lack of proactive administrative support.";
+            } else if (challenge.includes("CVs of key team members are not centrally stored or updated.")) {
+                techCanSolve = "HRIS or a talent management system can centralize CVs and prompt for regular updates. Document management with version control for CVs.";
+                techCannotSolve = "Technology requires individuals to *update* their CVs and the organization to *enforce* this practice. It cannot automatically gather new skills/experiences.";
+            } else if (challenge.includes("Queries are answered by senior members due to insufficient time for junior members.")) {
+                techCanSolve = "Knowledge bases and AI-powered chatbots can provide instant answers to common queries, reducing dependency on senior staff. E-learning for junior staff to build expertise.";
+                techCannotSolve = "Technology cannot replace the need for senior mentorship on complex, novel issues or the development of critical thinking skills in junior staff.";
+            } else if (challenge.includes("Fee payments are delayed.")) {
+                techCanSolve = "Automated invoicing and payment systems. Financial software with automated reconciliation and reporting on payment statuses.";
+                techCannotSolve = "Technology cannot resolve budget shortfalls, bureaucratic delays in finance departments, or human errors in payment processing unless processes are redesigned.";
+            } else if (challenge.includes("PMs prepare MoUs that face review delays.")) {
+                techCanSolve = "Contract lifecycle management (CLM) software with standardized templates and automated review workflows can accelerate MoU preparation and approval.";
+                techCannotSolve = "Technology cannot eliminate the legal review process or the need for human negotiation on complex clauses. It streamlines, but doesn't remove, human involvement.";
+            } else if (challenge.includes("Required regulatory approvals are identified late."))
+            {
+                techCanSolve = "Regulatory intelligence platforms and checklists can proactively identify all necessary approvals based on study design and location. Workflow tools can integrate regulatory milestones into project timelines.";
+                techCannotSolve = "Technology cannot guarantee full compliance if human expertise in interpreting complex regulations is lacking, or if there's a failure to update regulatory knowledge.";
+            }
+             else if (challenge.includes("Not all the PMs who have taken regulatory approvals in previous trials manage records of all the required documents")) {
+                techCanSolve = "Centralized document management systems with mandatory metadata fields and audit trails can ensure all required documents are recorded and easily retrievable.";
+                techCannotSolve = "Technology relies on PMs to consistently follow the process. It cannot instill discipline or a sense of responsibility if PMs are resistant or overwhelmed.";
+            } else if (challenge.includes("Members who have been involved in previous regulatory submissions are expected to support the compliance process on adhoc basis")) {
+                techCanSolve = "Knowledge management systems can capture lessons learned and detailed procedural steps from past submissions, reducing reliance on ad-hoc support. Training modules can disseminate this knowledge.";
+                techCannotSolve = "Technology cannot force knowledge transfer or incentivize experts to dedicate time if not formally planned. This requires a culture of documentation and sharing.";
+            } else if (challenge.includes("PMs have to be dependent on the people who have access to the credentials to check for any updates or complete any tasks on such portals.")) {
+                techCanSolve = "Single Sign-On (SSO) solutions or secure credential management systems could centralize access. Automated status updates from portals could be integrated into PM dashboards.";
+                techCannotSolve = "Technology cannot bypass security protocols or the need for authorized access. It also cannot resolve organizational silos that prevent appropriate credential sharing.";
+            } else if (challenge.includes("Query response takes long time due to dependency on the availability of senior team members")) {
+                techCanSolve = "Knowledge bases, AI chatbots, and tiered support systems (where junior members can handle simple queries) can reduce the load on senior members.";
+                techCannotSolve = "Technology cannot replace the unique expertise and judgment of senior members for complex queries. It also cannot improve their time management or availability if over-committed.";
+            } else if (challenge.includes("Tools are finalized in silos without comprehensive input.")) {
+                techCanSolve = "Collaborative design platforms (e.g., Miro, Figma) allow real-time co-creation and feedback. Workflow tools can enforce multi-stakeholder review gates.";
+                techCannotSolve = "Technology cannot ensure that all stakeholders *actively* participate or provide *quality* input if there's a lack of engagement or clarity on responsibilities.";
+            } else if (challenge.includes("PMs cannot find reference materials as shared portals are not maintained.")) {
+                techCanSolve = "Centralized document management systems with robust search, tagging, and maintenance protocols. Automated alerts for outdated documents.";
+                techCannotSolve = "Technology requires human effort to maintain and update the portals. It cannot prevent neglect or disorganization if there's no dedicated owner or process.";
+            } else if (challenge.includes("Delays in timely reviews and decision-making for CRFs and PISs.")) {
+                techCanSolve = "Workflow automation with digital approval paths and automated reminders. Collaboration platforms with defined review periods and real-time status tracking.";
+                techCannotSolve = "Technology cannot force reviewers to prioritize tasks or make decisions if they lack bandwidth, authority, or commitment.";
+            } else if (challenge.includes("Proper SOPs are not available at the study's beginning.")) {
+                techCanSolve = "Knowledge management systems for storing and distributing SOPs. Digital checklists to ensure SOP adherence in workflows.";
+                techCannotSolve = "Technology cannot *write* the SOPs; that requires human expertise and process definition. It also cannot enforce adherence if there's resistance.";
+            } else if (challenge.includes("The entire responsibility of drafting SOPs falls on PMs, who may lack subject expertise.")) {
+                techCanSolve = "Collaboration platforms for co-drafting SOPs with SMEs. Access to AI tools for drafting assistance. Centralized templates for consistent structure.";
+                techCannotSolve = "Technology cannot provide the subject matter expertise itself. It cannot shift organizational responsibility or mandate SME involvement if leadership doesn't prioritize it.";
+            } else if (challenge.includes("Pilot test learnings are not effectively integrated.")) {
+                techCanSolve = "Digital feedback mechanisms in pilot test tools to capture learnings systematically. Workflow automation to trigger protocol updates based on pilot results.";
+                techCannotSolve = "Technology facilitates data collection, but human analysis and decision-making are required to interpret learnings and implement changes.";
+            } else if (challenge.includes("Subject matter experts are not identified or made available in time.")) {
+                techCanSolve = "Talent management systems for SME identification. Automated scheduling tools for booking SME time. Collaboration platforms for asynchronous input from SMEs.";
+                techCannotSolve = "Technology cannot create SMEs or ensure their availability if over-committed. Leadership must prioritize SME involvement.";
+            } else if (challenge.includes("PMs are left to create training agendas alone, which may lack depth.")) {
+                techCanSolve = "Access to e-learning platforms with pre-built content. Collaboration tools for co-creating agendas with SMEs. AI tools for content generation ideas.";
+                techCannotSolve = "Technology cannot provide the instructional design expertise or the in-depth knowledge that only human SMEs possess.";
+            } else if (challenge.includes("PMs lead training sessions alone due to expert unavailability.")) {
+                techCanSolve = "Video conferencing tools for remote SME participation. Recording training sessions for later viewing. E-learning platforms for self-paced learning.";
+                techCannotSolve = "Technology cannot replace the dynamic interaction and Q&A possible with a live SME. It also cannot resolve SME availability issues if they are truly overstretched.";
+            } else if (challenge.includes("New PMs struggle to anticipate logistical needs due to no standard formats.")) {
+                techCanSolve = "Digital checklists and standardized templates for logistical planning within a PMS. Knowledge bases with best practices for new PMs.";
+                techCannotSolve = "Technology provides tools, but training and experience are still necessary for new PMs to effectively *apply* the formats and anticipate needs.";
+            } else if (challenge.includes("Admin/Finance teams depend on PMs for exhaustive input without guidance.")) {
+                techCanSolve = "Integrated enterprise resource planning (ERP) systems to share data between PM and Admin/Finance. Standardized digital forms for input requests.";
+                techCannotSolve = "Technology requires clear communication protocols and a willingness from both sides to use integrated systems. It cannot overcome inter-departmental silos.";
+            } else if (challenge.includes("Admin arrangements are reactive and uncoordinated.")) {
+                techCanSolve = "Automated workflow tools for administrative tasks. Shared calendars for coordination. Centralized event management software.";
+                techCannotSolve = "Technology relies on proactive planning and human coordination. It can streamline, but not replace, the foresight needed for effective administration.";
+            } else if (challenge.includes("Subject experts are often occupied, limiting their contribution to QA.")) {
+                techCanSolve = "Dedicated QA modules in a PMS to streamline the process. Automated alerts to SMEs when their input is required. Asynchronous feedback tools.";
+                techCannotSolve = "Technology cannot create more time for busy SMEs. Organizational prioritization and resource allocation are needed to free up their time for QA.";
+            } else if (challenge.includes("Each team operates based on individual past experiences, leading to inconsistent practices.")) {
+                techCanSolve = "Knowledge management systems to capture and disseminate best practices. Workflow automation to enforce standardized procedures. Training modules on consistent practices.";
+                techCannotSolve = "Technology can make best practices accessible, but cannot overcome resistance to change or a lack of understanding of new standards by individual teams.";
+            } else if (challenge.includes("Inadequate sitting arrangements and lack of space at sites.")) {
+                techCanSolve = "Digital site assessment tools to capture infrastructure details. Planning software to optimize space utilization or identify alternative sites.";
+                techCannotSolve = "Technology cannot physically create more space or funds for construction. These are physical and financial constraints that require capital investment.";
+            } else if (challenge.includes("Recruitment is not done even after implementation has started.")) {
+                techCanSolve = "Recruitment tracking dashboards linked to project timelines. Automated alerts for unfulfilled positions. Recruitment software to expedite sourcing.";
+                techCannotSolve = "Technology highlights the delay, but cannot force recruitment if there are underlying issues like budget, lack of candidates, or slow HR processes.";
+            } else if (challenge.includes("No fixed senior member is appointed for guidance.")) {
+                techCanSolve = "HRIS can track mentorship assignments. Communication platforms can facilitate direct access to assigned senior members.";
+                techCannotSolve = "Technology cannot *appoint* a senior member or ensure their active participation. This is an organizational commitment to leadership and mentorship.";
+            } else if (challenge.includes("No meetings before recruitment.")) {
+                techCanSolve = "Project management software can mandate a pre-recruitment kick-off meeting by setting it as a prerequisite task. Automated scheduling and agenda distribution.";
+                techCannotSolve = "Technology cannot enforce attendance or productive discussion if participants are unwilling or unprepared. Human adherence to the mandate is critical.";
+            } else if (challenge.includes("Clear intervention delivery protocols are not prepared or shared.")) {
+                techCanSolve = "Document management systems to store and disseminate protocols. E-learning modules to train staff on protocols. Version control for protocol updates.";
+                techCannotSolve = "Technology cannot *create* the protocols; that requires expert knowledge and detailed planning. It also cannot guarantee understanding or adherence.";
+            } else if (challenge.includes("Timely inputs from senior members for co-design workshops are often missing.")) {
+                techCanSolve = "Collaborative whiteboards for asynchronous input. Automated reminders for senior members. Shared documents for real-time collaboration.";
+                techCannotSolve = "Technology cannot force senior members to prioritize input if they are over-committed or disengaged. This requires direct leadership engagement.";
+            } else if (challenge.includes("Conflict between organizational goals and protocol objectives creates confusion.")) {
+                techCanSolve = "Project portfolio management tools to visualize alignment of projects with strategic goals. Collaboration platforms for discussing and resolving discrepancies.";
+                techCannotSolve = "Technology cannot resolve fundamental strategic disagreements or reconcile conflicting priorities. This requires high-level human negotiation and decision-making.";
+            } else if (challenge.includes("Qualitative research is siloed with no cross-learning opportunities.")) {
+                techCanSolve = "Knowledge management platforms for sharing research findings. Collaborative research tools for joint analysis. Internal social platforms for discussions.";
+                techCannotSolve = "Technology provides platforms, but the initiative to share, collaborate, and learn across silos rests with the researchers and their leadership.";
+            } else if (challenge.includes("PMs without prior qualitative experience are expected to manage these tasks.")) {
+                techCanSolve = "E-learning modules on qualitative methods. Access to online courses and resources. Collaboration platforms for seeking advice from experienced qualitative researchers.";
+                techCannotSolve = "Technology cannot magically impart experience or critical thinking skills. It supports learning, but direct mentorship and practical application are crucial.";
+            } else if (challenge.includes("Lack of confidence and guidance among young freshers with no mechanism for skill-building.")) {
+                techCanSolve = "LMS for structured skill-building courses. Digital mentorship platforms. Access to internal knowledge bases and forums for support.";
+                techCannotSolve = "Technology cannot replace the emotional support, personalized guidance, and confidence boost provided by a human mentor. It cannot address underlying self-doubt.";
+            } else if (challenge.includes("A 'plurality of instructions and guidance' makes execution difficult.")) {
+                techCanSolve = "Centralized knowledge base or single source of truth for all instructions. Document management systems with clear version control for official guidance.";
+                techCannotSolve = "Technology requires human effort to consolidate and maintain consistent information. It cannot prevent conflicting directives if organizational hierarchy is unclear.";
+            } else if (challenge.includes("Manuscript drafts remain in review for up to 6 months, leading to a lack of motivation.")) {
+                techCanSolve = "Workflow automation with strict review deadlines and automated reminders. Collaborative document editing tools with real-time tracking of review status.";
+                techCannotSolve = "Technology highlights delays, but cannot force reviewers to prioritize tasks or overcome their lack of bandwidth or commitment. This requires management intervention.";
+            } else if (challenge.includes("Stakeholder dissemination meetings are frequently last-minute and unplanned.")) {
+                techCanSolve = "Event management software for planning and scheduling. Automated reminders and agenda distribution. Collaboration platforms for content preparation.";
+                techCannotSolve = "Technology cannot instill proactive planning habits or overcome a reactive organizational culture. Leadership buy-in is essential.";
+            } else if (challenge.includes("Only project-specific staff are involved in manuscript contribution, limiting broader scientific input.")) {
+                techCanSolve = "Collaboration platforms to invite external contributors. Knowledge management systems to identify relevant experts outside the core project team.";
+                techCannotSolve = "Technology facilitates inclusion, but cannot overcome academic or organizational silos that discourage cross-project collaboration or sharing of credit.";
+            } else if (challenge.includes("Scale-up targets are set without a priori planning or data-driven information.")) {
+                techCanSolve = "Data analytics tools to model potential scale-up scenarios. Business intelligence dashboards to track relevant metrics for data-driven target setting.";
+                techCannotSolve = "Technology provides insights, but human leadership must commit to data-driven decision-making and resist setting arbitrary targets.";
+            } else if (challenge.includes("There is no internal planning for HR requirements for scale-up sites.")) {
+                techCanSolve = "HRIS for workforce planning and talent mapping. Recruitment software to manage pipeline for scale-up. Collaboration tools for HR-project team communication.";
+                techCannotSolve = "Technology cannot replace the strategic planning of HR needs or the commitment of resources to address them. These are organizational decisions.";
+            } else if (challenge.includes("Stakeholder mapping and liaisoning with the health system often occur too late.")) {
+                techCanSolve = "CRM systems to manage stakeholder relationships. Project management software to include stakeholder engagement as early tasks with deadlines.";
+                techCannotSolve = "Technology facilitates contact, but building relationships, trust, and effective liaisoning requires human interpersonal skills and dedicated effort.";
+            } else if (challenge.includes("Delaying government official onboarding for MoUs and co-designing for scale.")) {
+                techCanSolve = "Digital workflow for MoU approvals with automated routing. Collaboration platforms for virtual co-design workshops.";
+                techCannotSolve = "Technology cannot bypass bureaucratic processes or political complexities. Building relationships with government officials still requires human diplomacy and persistence.";
+            }
+            
+            detailedContent.push({
+                challenge_statement: challenge.trim() + (challenge.endsWith('.') ? '' : '.'), // Ensure period
+                type: challengeType,
+                tech_can_solve: techCanSolve,
+                tech_cannot_solve: techCannotSolve
+            });
+        });
+    });
+    return detailedContent;
+};
+
 document.addEventListener('DOMContentLoaded', () => {
     const navigation = document.getElementById('navigation');
     const contentContainer = document.getElementById('content-container');
     const menuToggle = document.getElementById('menu-toggle');
     const sidebar = document.getElementById('sidebar');
+    // searchInput, filterTypeDropdown, exportCsvButton are now dynamically created/accessed within renderContent()
 
     const groupedData = projectData.reduce((acc, item) => {
         if (!acc[item.category]) {
@@ -169,28 +583,31 @@ document.addEventListener('DOMContentLoaded', () => {
         return acc;
     }, {});
 
-    const phases = ['Dashboard', 'Project Flow', ...Object.keys(groupedData)]; // Added 'Project Flow'
+    const phases = ['Dashboard', ...Object.keys(groupedData), 'People vs Process Challenges']; // Added new phase
     let activePhase = 'Dashboard';
     let charts = {};
-    let currentTableData = []; // Store data for detailed table
-    let currentTableTitle = ''; // Store title for detailed table
-    let currentTableType = ''; // 'type', 'phase', or 'phase_category'
+    let currentTableData = [];
+    let currentTableTitle = '';
+    let currentTableType = '';
+    let currentSearchTerm = '';
+    let currentFilterType = 'All';
 
     // Unified color palette for consistency across all charts and tags
     const challengeTypeColors = {
-        'People': { background: '#FDE6D4', border: '#D4804E' }, // Differentiated color for People
+        'People': { background: '#FDE6D4', border: '#D4804E' },
         'Process': { background: '#d1c4e9', border: '#311b92' },
         'Technology': { background: '#c8e6c9', border: '#1b5e20' },
         'People + Process': { background: '#ffe0b2', border: '#e65100' },
         'People + Technology': { background: '#d1c4e9', border: '#311b92' },
         'Process + Technology': { background: '#c8e6c9', border: '#1b5e20' },
         'People + Process + Technology': { background: '#a7d9b9', border: '#004d40' },
-        'Mixed': { background: '#b0bec5', border: '#263238' }
+        'Mixed': { background: '#b0bec5', border: '#263238' },
+        'All': { background: '#e0e0e0', border: '#607d8b'}
     };
 
     function getChallengeType(typeString) {
         const types = typeString.toLowerCase().split('/').map(s => s.trim());
-        types.sort(); // Ensure consistent order for combinations
+        types.sort();
 
         if (types.includes('people') && types.includes('process') && types.includes('technology')) return 'People + Process + Technology';
         if (types.includes('people') && types.includes('process')) return 'People + Process';
@@ -200,15 +617,37 @@ document.addEventListener('DOMContentLoaded', () => {
         if (types.includes('process')) return 'Process';
         if (types.includes('technology')) return 'Technology';
         
-        return 'Mixed'; // Fallback
+        return 'Mixed';
     }
 
     function getTagHtml(typeString) {
         const type = getChallengeType(typeString);
-        const colors = challengeTypeColors[type] || challengeTypeColors['Mixed']; // Fallback to mixed if type not found
+        const colors = challengeTypeColors[type] || challengeTypeColors['Mixed'];
         return `<span class="tag" style="background-color: ${colors.background}; color: ${colors.border};">${type}</span>`;
     }
 
+    // Function to get filtered project data based on current search and filter terms
+    function getFilteredProjectData() {
+        let filteredData = projectData;
+
+        // Apply type filter
+        if (currentFilterType !== 'All') {
+            filteredData = filteredData.filter(item => getChallengeType(item.type) === currentFilterType);
+        }
+
+        // Apply search term filter
+        if (currentSearchTerm) {
+            const searchTermLower = currentSearchTerm.toLowerCase();
+            filteredData = filteredData.filter(item =>
+                item.category.toLowerCase().includes(searchTermLower) ||
+                item.step.toLowerCase().includes(searchTermLower) ||
+                item.challenge.toLowerCase().includes(searchTermLower) ||
+                item.solution.toLowerCase().includes(searchTermLower) ||
+                item.ownership.toLowerCase().includes(searchTermLower)
+            );
+        }
+        return filteredData;
+    }
 
     function renderNavigation() {
         navigation.innerHTML = phases.map(phase => `
@@ -220,9 +659,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function handleGoHome() {
         activePhase = 'Dashboard';
-        currentTableType = ''; // Clear any active table view
+        currentTableType = '';
         currentTableData = [];
         currentTableTitle = '';
+        currentSearchTerm = '';
+        currentFilterType = 'All';
         renderContent();
     }
 
@@ -233,14 +674,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 charts[chartId].destroy();
             }
         }
-        charts = {}; // Clear the charts object
+        charts = {};
 
-        if (currentTableType) { // If a detailed table is being displayed
+        const dataToRender = getFilteredProjectData();
+
+        if (currentTableType) {
             contentContainer.innerHTML = `
                 <div class="fade-in">
                     <button id="back-button-table" class="mb-4 px-6 py-2 bg-[#6d4c41] text-white rounded-lg shadow hover:bg-[#5d4037] transition">← Back</button>
                     <h2 class="text-3xl font-bold text-[#6d4c41] mb-2">Detailed Challenges: ${currentTableTitle}</h2>
-                    <p class="text-lg text-[#8d6e63] mb-8">Below is a comprehensive list of all challenges ${currentTableType === 'type' ? `of type '${currentTableTitle}' across all phases` : currentTableType === 'phase' ? `identified within the '${currentTableTitle}' phase` : `of type '${currentTableTitle.split(' - ')[1]}' within the '${currentTableTitle.split(' - ')[0]}' phase`}, with each specific challenge statement presented on its own row, along with their respective project phases, operational steps, proposed solutions, and ownership status. This granular view helps in understanding individual pain points more clearly.</p>
+                    <p class="text-lg text-[#8d6e63] mb-8">Below is a comprehensive list of all challenges ${currentTableType === 'type' ? `of type '${currentTableTitle}' across all phases` : currentTableType === 'phase' ? `identified within the '${currentTableTitle}' phase` : currentTableType === 'phase_category' ? `of type '${currentTableTitle.split(' - ')[1]}' within the '${currentTableTitle.split(' - ')[0]}' phase` : currentTableType === 'ownership' ? `associated with '${currentTableTitle}' across all phases` : currentTableType === 'phase_ownership' ? `associated with '${currentTableTitle.split(' - ')[1]}' within the '${currentTableTitle.split(' - ')[0]}' phase` : ''}, with each specific challenge statement presented on its own row, along with their respective project phases, operational steps, proposed solutions, and ownership status. This granular view helps in understanding individual pain points more clearly.</p>
                     <div class="bg-white p-6 rounded-2xl shadow-lg border border-gray-200 overflow-x-auto">
                         <table class="min-w-full divide-y divide-gray-200 detailed-table">
                             <thead class="bg-[#f8f7f4]">
@@ -260,11 +703,22 @@ document.addEventListener('DOMContentLoaded', () => {
                     <button id="back-button-table-bottom" class="mt-8 px-6 py-2 bg-[#6d4c41] text-white rounded-lg shadow hover:bg-[#5d4037] transition">← Back</button>
                 </div>
             `;
-            // Call renderDetailedTable after content is injected
             renderDetailedTable(currentTableTitle, currentTableData, currentTableType);
         } else if (activePhase === 'Dashboard') {
             contentContainer.innerHTML = `
                 <div class="fade-in">
+                    <!-- Global Search and Filter Section - NOW INSIDE DASHBOARD CONTENT -->
+                    <div class="mb-6 flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
+                        <input type="text" id="search-input" placeholder="Search all project data..." class="flex-1 p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-[#8d6e63] focus:border-transparent transition">
+                        <select id="filter-type" class="p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-[#8d6e63] focus:border-transparent transition bg-white text-[#3d3d3d]">
+                            <!-- Options populated by JS -->
+                        </select>
+                        <button id="export-csv-button" class="px-6 py-2 bg-[#4CAF50] text-white rounded-lg shadow hover:bg-[#45a049] transition flex items-center justify-center">
+                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                            Export CSV
+                        </button>
+                    </div>
+
                     <h2 class="text-3xl font-bold text-[#6d4c41] mb-2">Project Execution Dashboard</h2>
                     <p class="text-lg text-[#8d6e63] mb-8">An overview of challenges across the entire project lifecycle. Click on a bar to see a detailed list of challenges for that category or phase.</p>
 
@@ -287,20 +741,106 @@ document.addEventListener('DOMContentLoaded', () => {
                     </div>
                 </div>
             `;
-            // Call chart rendering functions AFTER content is injected
-            renderDashboardChartType();
-            renderChallengesByPhaseChart();
-            window.scrollTo(0, 0); // Scroll to top when rendering dashboard
-        } else if (activePhase === 'Project Flow') { // New 'Project Flow' view
-            renderProjectFlow();
+            // Get references to the elements AFTER they are injected into the DOM
+            const searchInput = document.getElementById('search-input');
+            const filterTypeDropdown = document.getElementById('filter-type');
+            const exportCsvButton = document.getElementById('export-csv-button');
+
+            // Set values and attach event listeners
+            searchInput.value = currentSearchTerm;
+            // Initial population of the filter dropdown for the dashboard view
+            const allChallengeTypesForFilter = ['All', ...new Set(projectData.map(item => getChallengeType(item.type)))].sort();
+            filterTypeDropdown.innerHTML = allChallengeTypesForFilter.map(type => `<option value="${type}" ${type === currentFilterType ? 'selected' : ''}>${type}</option>`).join('');
+            filterTypeDropdown.value = currentFilterType; // Ensure correct selection after populating
+
+            searchInput.addEventListener('input', (e) => {
+                currentSearchTerm = e.target.value;
+                activePhase = 'Dashboard'; // Stay on dashboard
+                currentTableType = '';
+                renderContent();
+            });
+
+            filterTypeDropdown.addEventListener('change', (e) => {
+                currentFilterType = e.target.value;
+                activePhase = 'Dashboard'; // Stay on dashboard
+                currentTableType = '';
+                renderContent();
+            });
+
+            exportCsvButton.addEventListener('click', exportToCsv);
+
+            renderDashboardChartType(dataToRender);
+            renderChallengesByPhaseChart(dataToRender);
             window.scrollTo(0, 0);
-        } else {
-            const phaseData = groupedData[activePhase];
+        } else if (activePhase === 'People vs Process Challenges') {
+            const peopleVsProcessDetailedContent = generatePeopleVsProcessDetailedContent();
+            contentContainer.innerHTML = `
+                <div class="fade-in">
+                    <button id="home-button" class="flex items-center px-4 py-2 bg-[#6d4c41] text-white rounded-lg shadow hover:bg-[#5d4037] transition mb-4">
+                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2 2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+                        Home
+                    </button>
+                    <h2 class="text-3xl font-bold text-[#6d4c41] mb-2">People vs Process Challenges: Technology's Role</h2>
+                    <p class="text-lg text-[#8d6e63] mb-8">This table provides a granular analysis of how technology can and cannot address various People and Process challenges identified throughout the project lifecycle.</p>
+
+                    <div class="bg-white p-6 rounded-2xl shadow-lg border border-gray-200 overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-200 challenges-table">
+                            <thead class="bg-[#f8f7f4]">
+                                <tr>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-[#5d4037] uppercase tracking-wider rounded-tl-lg">Challenge Statement</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-[#5d4037] uppercase tracking-wider">Primary Type</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-[#5d4037] uppercase tracking-wider">How Technology Can Help</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-[#5d4037] uppercase tracking-wider rounded-tr-lg">Technology's Limitations</th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200">
+                                ${peopleVsProcessDetailedContent.map(item => `
+                                    <tr>
+                                        <td class="px-6 py-4 whitespace-normal text-sm font-medium text-gray-900">${item.challenge_statement}</td>
+                                        <td class="px-6 py-4 whitespace-normal text-sm text-gray-700">${item.type}</td>
+                                        <td class="px-6 py-4 whitespace-normal text-sm text-gray-700">${item.tech_can_solve}</td>
+                                        <td class="px-6 py-4 whitespace-normal text-sm text-gray-700">${item.tech_cannot_solve}</td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            `;
+            document.getElementById('home-button').addEventListener('click', handleGoHome);
+            window.scrollTo(0, 0);
+        }
+        else {
+            const phaseData = dataToRender.filter(item => item.category === activePhase);
             const challengeCounts = phaseData.reduce((acc, item) => {
                 const type = getChallengeType(item.type);
                 acc[type] = (acc[type] || 0) + 1;
                 return acc;
             }, {});
+
+            // Calculate ownership involvement
+            const ownershipCounts = {};
+            phaseData.forEach(item => {
+                const owners = item.ownership.split(',').map(o => o.trim()).filter(o => o);
+                owners.forEach(owner => {
+                    ownershipCounts[owner] = (ownershipCounts[owner] || 0) + 1;
+                });
+            });
+
+            // Calculate average solution points (still calculating, but not displaying in its own section)
+            let totalSolutionPoints = 0;
+            let totalChallengesWithSolutions = 0;
+            phaseData.forEach(item => {
+                if (item.solution) {
+                    const solutionPoints = item.solution.split(/\.\s*(?=[A-Z])|\;\s*(?=[A-Z])/).filter(s => s.trim() !== '').length;
+                    if (solutionPoints > 0) {
+                        totalSolutionPoints += solutionPoints;
+                        totalChallengesWithSolutions++;
+                    }
+                }
+            });
+            const averageSolutionPoints = totalChallengesWithSolutions > 0 ? (totalSolutionPoints / totalChallengesWithSolutions).toFixed(1) : 0;
+
 
             contentContainer.innerHTML = `
                 <div class="fade-in">
@@ -311,186 +851,66 @@ document.addEventListener('DOMContentLoaded', () => {
                     <h2 class="text-3xl font-bold text-[#6d4c41] mb-2">${activePhase}</h2>
                     <p class="text-lg text-[#8d6e63] mb-8">Exploring the execution steps, challenges, and solutions for the ${activePhase.toLowerCase()} phase.</p>
 
-                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
-                        <div class="lg:col-span-1 bg-white p-6 rounded-2xl shadow-lg border border-gray-200">
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+                        <div class="bg-white p-6 rounded-2xl shadow-lg border border-gray-200">
                              <h3 class="text-xl font-semibold mb-4 text-[#5d4037]">Challenges in this Phase</h3>
                              <p class="text-sm text-gray-600 mb-6">This chart shows the breakdown of challenges specific to the ${activePhase} phase. Click on a segment to view details of that challenge type within this phase.</p>
                             <div class="chart-container h-64 md:h-72" id="chart-container-phase-${activePhase.replace(/\s/g, '')}">
                                 <canvas id="phase-chart-${activePhase.replace(/\s/g, '')}"></canvas>
                             </div>
                         </div>
-                        <div class="lg:col-span-2 bg-white p-6 rounded-2xl shadow-lg border border-gray-200">
-                            <h3 class="text-xl font-semibold mb-4 text-[#5d4037]">Execution Steps & Solutions</h3>
-                             <p class="text-sm text-gray-600 mb-6">This section details the specific steps involved in this phase. Click on any step to reveal the associated challenges and the recommended project management solutions for addressing them effectively.</p>
-                            <div id="accordion-container" class="space-y-3"></div>
+                        <div class="bg-white p-6 rounded-2xl shadow-lg border border-gray-200">
+                            <h3 class="text-xl font-semibold mb-4 text-[#5d4037]">Ownership Involvement</h3>
+                            <p class="text-sm text-gray-600 mb-6">This chart highlights the key ownership groups involved in addressing challenges and solutions within the ${activePhase} phase.</p>
+                            <div class="chart-container h-64 md:h-72" id="chart-container-ownership-${activePhase.replace(/\s/g, '')}">
+                                <canvas id="ownership-chart-${activePhase.replace(/\s/g, '')}"></canvas>
+                            </div>
                         </div>
+                    </div>
+                     <div class="bg-white p-6 rounded-2xl shadow-lg border border-gray-200 mb-8">
+                            <h3 class="text-xl font-semibold mb-4 text-[#5d4037]">Solution Density Score</h3>
+                            <p class="text-sm text-gray-600 mb-2">Average number of distinct points/sentences in solutions for challenges in this phase:</p>
+                            <p class="text-3xl font-bold text-[#6d4c41]">${averageSolutionPoints}</p>
+                            <p class="text-xs text-gray-500 mt-2">A higher number indicates more detailed or multi-faceted solutions.</p>
+                        </div>
+                    <div class="bg-white p-6 rounded-2xl shadow-lg border border-gray-200">
+                        <h3 class="text-xl font-semibold mb-4 text-[#5d4037]">Execution Steps & Solutions</h3>
+                         <p class="text-sm text-gray-600 mb-6">This section details the specific steps involved in this phase. Click on any step to reveal the associated challenges and the recommended project management solutions for addressing them effectively.</p>
+                        <div id="accordion-container" class="space-y-3"></div>
                     </div>
                 </div>
             `;
-            // Call chart rendering functions AFTER content is injected
-            renderPhaseChart(challengeCounts, activePhase); // Pass activePhase to chart renderer
+            renderPhaseChart(challengeCounts, activePhase);
+            renderOwnershipChart(ownershipCounts, activePhase); // New call
             renderAccordion(phaseData);
-            document.getElementById('home-button').addEventListener('click', handleGoHome); // Add event listener for the new home button
-            window.scrollTo(0, 0); // Scroll to top for phase detail page
+            document.getElementById('home-button').addEventListener('click', handleGoHome);
+            window.scrollTo(0, 0);
         }
         updateActiveLink();
     }
     
     function renderAccordion(phaseData) {
         const accordionContainer = document.getElementById('accordion-container');
-        accordionContainer.innerHTML = phaseData.map((item, index) => `
-            <div class="border border-gray-200 rounded-lg overflow-hidden">
-                <button class="accordion-toggle w-full text-left p-4 bg-[#f8f7f4] hover:bg-[#f0e6e0] transition flex justify-between items-center">
-                    <span class="font-semibold text-[#6d4c41]">${item.step}</span>
-                    <svg class="w-5 h-5 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                </button>
-                <div class="accordion-content bg-white">
-                    <div class="p-4 border-t border-gray-200">
-                        <h4 class="font-semibold mb-2 text-[#5d4037]">Challenge:</h4>
-                        <p class="text-sm mb-4 text-gray-700">${item.challenge}</p>
-                        ${getTagHtml(item.type)}
-                        <h4 class="font-semibold mt-4 mb-2 text-[#5d4037]">PM Solution:</h4>
-                        <p class="text-sm text-gray-700">${item.solution}</p>
-                    </div>
-                </div>
-            </div>
-        `).join('');
-    }
-
-    // New function to render the project flow visualization
-    function renderProjectFlow() {
-        // Define the specific order of phases for the flow
-        const flowPhasesOrder = [
-            'Conceptualization & Planning',
-            'Introduction of PMS',
-            'Detailed Budget Adaptation',
-            'Team Recruitment Process',
-            'Protocol, Tools & ICF Development',
-            'Formation of Expert Committees',
-            'Site Selection',
-            'Approvals & Compliance',
-            'Pre-Implementation Setup',
-            'Training & Field Readiness',
-            'Quality Assurance Protocol & Execution',
-            'Implementation & Monitoring',
-            'Data Collection, Management & Analysis',
-            'Dissemination & Publication',
-            'Scale-Up Planning'
-        ];
-
-        let flowHtml = `
-            <div class="fade-in">
-                <button id="home-button" class="flex items-center px-4 py-2 bg-[#6d4c41] text-white rounded-lg shadow hover:bg-[#5d4037] transition mb-4">
-                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2 2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
-                    Home
-                </button>
-                <h2 class="text-3xl font-bold text-[#6d4c41] mb-2">Project Execution Flow</h2>
-                <p class="text-lg text-[#8d6e63] mb-8">Explore the detailed breakdown of project execution phases, steps, and their associated challenges and solutions.</p>
-                <div id="project-flow-accordion-container" class="space-y-4">
-        `;
-
-        flowPhasesOrder.forEach((category, categoryIndex) => {
-            const categoryData = projectData.filter(item => item.category === category) || []; // Filter items belonging to this category
-
-            flowHtml += `
+        accordionContainer.innerHTML = phaseData.map((item, index) => {
+            return `
                 <div class="border border-gray-200 rounded-lg overflow-hidden">
-                    <button class="flow-category-toggle w-full text-left p-4 bg-[#f0e6e0] hover:bg-[#eaddd7] transition flex justify-between items-center" data-category-index="${categoryIndex}">
-                        <span class="font-semibold text-[#5d4037] text-lg">${categoryIndex + 1}. ${category}</span>
+                    <button class="accordion-toggle w-full text-left p-4 bg-[#f8f7f4] hover:bg-[#f0e6e0] transition flex justify-between items-center">
+                        <span class="font-semibold text-[#6d4c41]">${item.step}</span>
                         <svg class="w-5 h-5 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                     </button>
-                    <div class="flow-category-content bg-white">
-                        <div class="p-4 space-y-3">
-            `;
-
-            categoryData.forEach((item, itemIndex) => {
-                flowHtml += `
-                            <div class="border border-gray-100 rounded-md overflow-hidden">
-                                <button class="flow-step-toggle w-full text-left p-3 bg-[#f8f7f4] hover:bg-[#f0e6e0] transition flex justify-between items-center" data-category-index="${categoryIndex}" data-item-index="${itemIndex}">
-                                    <span class="font-medium text-[#6d4c41] text-base">${item.step}</span>
-                                    <svg class="w-4 h-4 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                                </button>
-                                <div class="flow-step-content bg-white">
-                                    <div class="p-3 border-t border-gray-100 text-sm text-gray-700">
-                                        <h4 class="font-semibold mb-1 text-[#5d4037]">Challenge:</h4>
-                                        <p class="mb-2">${item.challenge}</p>
-                                        <h4 class="font-semibold mb-1 text-[#5d4037]">PM Solution:</h4>
-                                        <p>${item.solution}</p>
-                                    </div>
-                                </div>
-                            </div>
-                `;
-            });
-
-            flowHtml += `
+                    <div class="accordion-content bg-white">
+                        <div class="p-4 border-t border-gray-200">
+                            <h4 class="font-semibold mb-2 text-[#5d4037]">Challenge:</h4>
+                            <p class="text-sm mb-4 text-gray-700">${item.challenge}</p>
+                            ${getTagHtml(item.type)}
+                            <h4 class="font-semibold mt-4 mb-2 text-[#5d4037]">PM Solution:</h4>
+                            <p class="text-sm text-gray-700">${item.solution}</p>
                         </div>
                     </div>
                 </div>
             `;
-        });
-
-        flowHtml += `
-                </div>
-            </div>
-        `;
-        contentContainer.innerHTML = flowHtml;
-        document.getElementById('home-button').addEventListener('click', handleGoHome);
-
-        // Add event listeners for the new flow accordions
-        document.querySelectorAll('.flow-category-toggle').forEach(button => {
-            button.addEventListener('click', (e) => {
-                const content = e.currentTarget.nextElementSibling;
-                const icon = e.currentTarget.querySelector('svg');
-
-                // Close all other top-level categories
-                document.querySelectorAll('.flow-category-content').forEach(otherContent => {
-                    if (otherContent !== content) {
-                        otherContent.style.maxHeight = null;
-                        otherContent.previousElementSibling.querySelector('svg').classList.remove('rotate-180');
-                    }
-                });
-
-                if (content.style.maxHeight) {
-                    content.style.maxHeight = null;
-                    icon.classList.remove('rotate-180');
-                } else {
-                    // Temporarily set height to scrollHeight for opening
-                    content.style.maxHeight = content.scrollHeight + "px";
-                    icon.classList.add('rotate-180');
-                    // Recalculate after a short delay to ensure all nested elements have rendered
-                    setTimeout(() => {
-                        content.style.maxHeight = content.scrollHeight + "px";
-                    }, 50); // Small delay
-                }
-            });
-        });
-
-        document.querySelectorAll('.flow-step-toggle').forEach(button => {
-            button.addEventListener('click', (e) => {
-                const content = e.currentTarget.nextElementSibling;
-                const icon = e.currentTarget.querySelector('svg');
-
-                if (content.style.maxHeight) {
-                    content.style.maxHeight = null;
-                    icon.classList.remove('rotate-180');
-                } else {
-                    content.style.maxHeight = content.scrollHeight + "px";
-                    icon.classList.add('rotate-180');
-                    // When a step content is opened, also ensure its parent category is fully open
-                    const parentCategoryContent = e.currentTarget.closest('.flow-category-content');
-                    if (parentCategoryContent && !parentCategoryContent.style.maxHeight) {
-                        parentCategoryContent.style.maxHeight = parentCategoryContent.scrollHeight + "px";
-                    }
-                    setTimeout(() => {
-                        content.style.maxHeight = content.scrollHeight + "px";
-                        if (parentCategoryContent) {
-                             parentCategoryContent.style.maxHeight = parentCategoryContent.scrollHeight + "px";
-                        }
-                    }, 50); // Small delay
-                }
-            });
-        });
+        }).join('');
     }
-
 
     const chartConfig = {
         plugins: {
@@ -517,7 +937,6 @@ document.addEventListener('DOMContentLoaded', () => {
                         if (label) {
                             label += ': ';
                         }
-                        // Use formattedValue which is explicitly for display
                         label += context.formattedValue;
                         return label;
                     }
@@ -527,19 +946,14 @@ document.addEventListener('DOMContentLoaded', () => {
         maintainAspectRatio: false,
     };
 
-    function renderDashboardChartType() {
-        const allChallengesByType = {}; // This will store the count of individual challenge statements by type
+    function renderDashboardChartType(dataForCharts) {
+        const allChallengesByType = {};
 
-        projectData.forEach(item => {
-            // Split the challenge string into individual sentences/statements
+        dataForCharts.forEach(item => {
             const challengesArray = item.challenge.split(/\.\s*(?=[A-Z])/).filter(s => s.trim() !== '');
-            const itemType = getChallengeType(item.type); // Get the overall type for the item
+            const itemType = getChallengeType(item.type);
 
             challengesArray.forEach(singleChallenge => {
-                // For each individual statement, we'll associate it with the item's main type.
-                // If a single challenge statement *itself* could have multiple types,
-                // this logic would need to be more complex (e.g., using an LLM to classify each sentence).
-                // For now, we'll assume the item's type applies to its constituent challenge statements.
                 allChallengesByType[itemType] = (allChallengesByType[itemType] || 0) + 1;
             });
         });
@@ -551,21 +965,19 @@ document.addEventListener('DOMContentLoaded', () => {
         const canvasId = 'dashboard-chart-type';
         const chartContainer = document.getElementById('chart-container-dashboard-type');
         
-        // Remove old canvas element from DOM if it exists within the container
         let oldCanvas = document.getElementById(canvasId);
         if (oldCanvas) {
             oldCanvas.remove();
         }
 
-        // Create a new canvas element and append it to the container
         const newCanvas = document.createElement('canvas');
         newCanvas.id = canvasId;
         chartContainer.appendChild(newCanvas);
         const ctxType = newCanvas.getContext('2d');
 
-        // Destroy existing chart instance if it exists (safety net, should be handled by clearing charts object)
         if (charts[canvasId]) {
             charts[canvasId].destroy();
+            charts[canvasId] = null;
         }
 
         charts[canvasId] = new Chart(ctxType, {
@@ -599,7 +1011,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         const clickedElementIndex = elements[0].index;
                         const label = charts[canvasId].data.labels[clickedElementIndex];
                         currentTableTitle = label;
-                        currentTableData = projectData.filter(item => getChallengeType(item.type) === label);
+                        currentTableData = getFilteredProjectData().filter(item => getChallengeType(item.type) === label);
                         currentTableType = 'type';
                         renderContent();
                     }
@@ -608,9 +1020,8 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    function renderChallengesByPhaseChart() {
-        const challengesByPhaseDetailedCount = projectData.reduce((acc, item) => {
-            // Split the challenge string into individual sentences/statements
+    function renderChallengesByPhaseChart(dataForCharts) {
+        const challengesByPhaseDetailedCount = dataForCharts.reduce((acc, item) => {
             const challengesArray = item.challenge.split(/\.\s*(?=[A-Z])/).filter(s => s.trim() !== '');
             acc[item.category] = (acc[item.category] || 0) + challengesArray.length;
             return acc;
@@ -619,31 +1030,49 @@ document.addEventListener('DOMContentLoaded', () => {
         const canvasId = 'dashboard-chart-phase';
         const chartContainer = document.getElementById('chart-container-dashboard-phase');
 
-        // Remove old canvas element from DOM if it exists within the container
         let oldCanvas = document.getElementById(canvasId);
         if (oldCanvas) {
             oldCanvas.remove();
         }
 
-        // Create a new canvas element and append it to the container
         const newCanvas = document.createElement('canvas');
         newCanvas.id = canvasId;
         chartContainer.appendChild(newCanvas);
         const ctxPhase = newCanvas.getContext('2d');
 
-        // Destroy existing chart instance if it exists (safety net)
         if (charts[canvasId]) {
             charts[canvasId].destroy();
+            charts[canvasId] = null;
         }
+
+        const orderedPhaseLabels = [
+            'Conceptualization & Planning',
+            'Introduction of PMS',
+            'Detailed Budget Adaptation',
+            'Team Recruitment Process',
+            'Protocol, Tools & ICF Development',
+            'Formation of Expert Committees',
+            'Site Selection',
+            'Approvals & Compliance',
+            'Pre-Implementation Setup',
+            'Training & Field Readiness',
+            'Quality Assurance Protocol & Execution',
+            'Implementation & Monitoring',
+            'Data Collection, Management & Analysis',
+            'Dissemination & Publication',
+            'Scale-Up Planning'
+        ];
+
+        const orderedPhaseCounts = orderedPhaseLabels.map(phase => challengesByPhaseDetailedCount[phase] || 0);
 
         charts[canvasId] = new Chart(ctxPhase, {
             type: 'bar',
             data: {
-                labels: Object.keys(challengesByPhaseDetailedCount),
+                labels: orderedPhaseLabels,
                 datasets: [{
                     label: 'Total Individual Challenges',
-                    data: Object.values(challengesByPhaseDetailedCount),
-                    backgroundColor: ['#a7d9b9', '#78c6a3', '#51af8a', '#2a9871', '#05825d', '#006c4a', '#00573e', '#004230', '#002e21', '#001a13', '#71b191', '#8fd9a9', '#5da589', '#3b8e6f', '#1c7857'], // More shades for distinction
+                    data: orderedPhaseCounts,
+                    backgroundColor: ['#a7d9b9', '#78c6a3', '#51af8a', '#2a9871', '#05825d', '#006c4a', '#00573e', '#004230', '#002e21', '#001a13', '#71b191', '#8fd9a9', '#5da589', '#3b8e6f', '#1c7857'],
                     borderColor: ['#2a9871', '#05825d', '#006c4a', '#00573e', '#004230', '#002e21', '#001a13', '#00100a', '#000805', '#000302', '#549c77', '#7abf95', '#498a6f', '#2f7457', '#125c3e'],
                     borderWidth: 1,
                     borderRadius: 4
@@ -666,8 +1095,86 @@ document.addEventListener('DOMContentLoaded', () => {
                         const clickedElementIndex = elements[0].index;
                         const label = charts[canvasId].data.labels[clickedElementIndex];
                         currentTableTitle = label;
-                        currentTableData = projectData.filter(item => item.category === label);
+                        currentTableData = getFilteredProjectData().filter(item => item.category === label);
                         currentTableType = 'phase';
+                        renderContent();
+                    }
+                }
+            }
+        });
+    }
+
+
+    // Function to render the new Ownership Involvement Chart
+    function renderOwnershipChart(ownershipCounts, phaseName) {
+        const canvasId = `ownership-chart-${phaseName.replace(/\s/g, '')}`;
+        const chartContainer = document.getElementById(`chart-container-ownership-${phaseName.replace(/\s/g, '')}`);
+
+        let oldCanvas = document.getElementById(canvasId);
+        if (oldCanvas) {
+            oldCanvas.remove();
+        }
+
+        const newCanvas = document.createElement('canvas');
+        newCanvas.id = canvasId;
+        chartContainer.appendChild(newCanvas);
+        const ctx = newCanvas.getContext('2d');
+
+        if (charts[canvasId]) {
+            charts[canvasId].destroy();
+            charts[canvasId] = null;
+        }
+
+        const labels = Object.keys(ownershipCounts);
+        // Using a set of neutral/earthy colors for ownership chart
+        const backgroundColors = [
+            '#a8dadc', '#457b9d', '#1d3557', '#f4a261', '#e76f51',
+            '#2a9d8f', '#e9c46a', '#ee9b00', '#ca6702', '#bb3e03',
+            '#ae2012', '#9b2226', '#8d99ae', '#7a818c', '#5a6270'
+        ];
+        const borderColors = [
+            '#3d5a80', '#204060', '#0f1a2a', '#a06a3e', '#b8543b',
+            '#1c6e66', '#a18b4e', '#c17d00', '#9c4c01', '#922a02',
+            '#871a0e', '#7a1b1e', '#6e7b8b', '#5c6370', '#4a4f5d'
+        ];
+
+
+        charts[canvasId] = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Number of Challenges/Solutions',
+                    data: Object.values(ownershipCounts),
+                    backgroundColor: backgroundColors.slice(0, labels.length), // Use enough colors
+                    borderColor: borderColors.slice(0, labels.length),
+                    borderWidth: 1,
+                    borderRadius: 4
+                }]
+            },
+            options: {
+                ...chartConfig,
+                indexAxis: 'y', // Horizontal bar chart
+                scales: {
+                    x: { beginAtZero: true, grid: { color: '#e0e0e0' } },
+                    y: { grid: { display: false } }
+                },
+                plugins: {
+                    ...chartConfig.plugins,
+                    legend: {
+                        display: false // No legend needed for single dataset bar chart
+                    }
+                },
+                onClick: (event, elements) => { // Add onClick handler
+                    if (elements.length > 0) {
+                        const clickedElementIndex = elements[0].index;
+                        const label = charts[canvasId].data.labels[clickedElementIndex];
+                        currentTableTitle = `${phaseName} - ${label} Ownership`; // Title includes phase and owner
+                        // Filter projectData to find items where the ownership string contains the clicked label AND is in the current phase
+                        currentTableData = projectData.filter(item => 
+                            item.category === phaseName && item.ownership.split(',').map(o => o.trim()).includes(label)
+                        );
+                        currentTableType = 'phase_ownership'; // New table type for ownership within a phase
                         renderContent();
                     }
                 }
@@ -680,21 +1187,19 @@ document.addEventListener('DOMContentLoaded', () => {
         const canvasId = `phase-chart-${phaseName.replace(/\s/g, '')}`;
         const chartContainer = document.getElementById(`chart-container-phase-${phaseName.replace(/\s/g, '')}`);
 
-        // Remove old canvas element from DOM if it exists within the container
         let oldCanvas = document.getElementById(canvasId);
         if (oldCanvas) {
             oldCanvas.remove();
         }
 
-        // Create a new canvas element and append it to the container
         const newCanvas = document.createElement('canvas');
         newCanvas.id = canvasId;
         chartContainer.appendChild(newCanvas);
         const ctx = newCanvas.getContext('2d');
 
-        // Destroy existing chart instance if it exists (safety net)
-        if (charts[phaseName]) { // Use phaseName as the key for these charts
+        if (charts[phaseName]) {
             charts[phaseName].destroy();
+            charts[phaseName] = null;
         }
 
         const labels = Object.keys(challengeCounts);
@@ -702,14 +1207,14 @@ document.addEventListener('DOMContentLoaded', () => {
         const backgroundColors = labels.map(label => challengeTypeColors[label] ? challengeTypeColors[label].background : challengeTypeColors['Mixed'].background);
         const borderColors = labels.map(label => challengeTypeColors[label] ? challengeTypeColors[label].border : challengeTypeColors['Mixed'].border);
 
-        charts[phaseName] = new Chart(ctx, { // Use phaseName as the key for charts object
+        charts[phaseName] = new Chart(ctx, {
             type: 'doughnut',
             data: {
                 labels: labels,
                 datasets: [{
                     data: Object.values(challengeCounts),
                     backgroundColor: backgroundColors,
-                    borderColor: '#fff', // Donut chart white border
+                    borderColor: '#fff',
                     borderWidth: 2,
                 }]
             },
@@ -719,12 +1224,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 onClick: (event, elements) => {
                     if (elements.length > 0) {
                         const clickedElementIndex = elements[0].index;
-                        const label = charts[phaseName].data.labels[clickedElementIndex]; // Get label from current phase chart
+                        const label = charts[phaseName].data.labels[clickedElementIndex];
                         
-                        // Filter by current phase AND clicked challenge type
                         currentTableTitle = `${phaseName} - ${label} Challenges`;
                         currentTableData = projectData.filter(item => item.category === phaseName && getChallengeType(item.type) === label);
-                        currentTableType = 'phase_category'; // Indicates filtering by phase AND category
+                        currentTableType = 'phase_category';
                         renderContent();
                     }
                 }
@@ -735,27 +1239,43 @@ document.addEventListener('DOMContentLoaded', () => {
     function renderDetailedTable(title, data, type) {
         let tableRowsHtml = '';
         data.forEach(item => {
-            // Split the challenge string into individual sentences
-            const challengesArray = item.challenge.split(/\.\s*(?=[A-Z])/).filter(s => s.trim() !== ''); // Split by period followed by a space and an uppercase letter, then filter empty strings
-            
-            challengesArray.forEach((singleChallenge) => {
-                // Split ownership by comma and join with ', ' for comma separation
-                const ownershipFormatted = item.ownership ? item.ownership.split(', ').join(', ') : '';
+            const ownershipFormatted = item.ownership ? item.ownership.split(', ').map(o => o.trim()).filter(o => o).join(', ') : '';
 
-                tableRowsHtml += `
-                    <tr>
-                        <td class="px-6 py-4 whitespace-normal text-sm font-medium text-gray-900 w-phase">${item.category}</td>
-                        <td class="px-6 py-4 whitespace-normal text-sm text-gray-700 w-step">${item.step}</td>
-                        <td class="px-6 py-4 whitespace-normal text-sm text-gray-700 w-challenge">${singleChallenge.trim() + (singleChallenge.endsWith('.') ? '' : '.')}</td> <!-- Add back period if missing -->
-                        <td class="px-6 py-4 whitespace-normal text-sm text-gray-700 w-solution">${item.solution}</td>
-                        <td class="px-6 py-4 whitespace-normal text-sm text-gray-700 w-ownership">${ownershipFormatted}</td>
-                    </tr>
-                `;
-            });
+            let challengeHtml = '';
+            if (item.challenge) {
+                const challengesArray = item.challenge.split(/\.\s*(?=[A-Z])/).filter(s => s.trim() !== '');
+                if (challengesArray.length > 0) {
+                    challengeHtml = `<ul>${challengesArray.map(c => `<li>${c.trim() + (c.endsWith('.') ? '' : '.')}</li>`).join('')}</ul>`;
+                } else {
+                    challengeHtml = '<span class="text-gray-500 italic">No challenges listed.</span>';
+                }
+            } else {
+                challengeHtml = '<span class="text-gray-500 italic">No challenges listed.</span>';
+            }
+
+            let solutionHtml = '';
+            if (item.solution) {
+                const solutionsArray = item.solution.split(/\.\s*(?=[A-Z])|\;\s*(?=[A-Z])/).filter(s => s.trim() !== ''); // Split by . or ;
+                if (solutionsArray.length > 0) {
+                    solutionHtml = `<ul>${solutionsArray.map(s => `<li>${s.trim() + (s.endsWith('.') ? '' : '.')}</li>`).join('')}</ul>`;
+                } else {
+                    solutionHtml = '<span class="text-gray-500 italic">No solutions listed.</span>';
+                }
+            } else {
+                solutionHtml = '<span class="text-gray-500 italic">No solutions listed.</span>';
+            }
+
+            tableRowsHtml += `
+                <tr>
+                    <td class="px-6 py-4 whitespace-normal text-sm font-medium text-gray-900 w-phase">${item.category}</td>
+                    <td class="px-6 py-4 whitespace-normal text-sm text-gray-700 w-step">${item.step}</td>
+                    <td class="px-6 py-4 whitespace-normal text-sm text-gray-700 w-challenge">${challengeHtml}</td>
+                    <td class="px-6 py-4 whitespace-normal text-sm text-gray-700 w-solution">${solutionHtml}</td>
+                    <td class="px-6 py-4 whitespace-normal text-sm text-gray-700 w-ownership">${ownershipFormatted}</td>
+                </tr>
+            `;
         });
 
-        // The innerHTML for the container is already set in renderContent()
-        // Now just populate the tbody
         const tbody = contentContainer.querySelector('.detailed-table tbody');
         if (tbody) {
             tbody.innerHTML = tableRowsHtml;
@@ -763,15 +1283,63 @@ document.addEventListener('DOMContentLoaded', () => {
 
         document.getElementById('back-button-table').addEventListener('click', handleBackFromTable);
         document.getElementById('back-button-table-bottom').addEventListener('click', handleBackFromTable);
+        
+        setTimeout(() => {
+            window.scrollTo(0, 0);
+        }, 0);
     }
 
     function handleBackFromTable() {
         currentTableData = [];
         currentTableTitle = '';
         currentTableType = '';
-        activePhase = 'Dashboard'; // Ensure returning to Dashboard
-        renderContent(); // Re-render to Dashboard
+        activePhase = 'Dashboard';
+        renderContent();
     }
+
+    function exportToCsv() {
+        const data = getFilteredProjectData();
+        if (data.length === 0) {
+            alert('No data to export.');
+            return;
+        }
+
+        const headers = [
+            "Project Phase",
+            "Operational Step",
+            "Challenge",
+            "Solution",
+            "Ownership",
+            "Challenge Type"
+        ];
+
+        const rows = data.map(item => [
+            JSON.stringify(item.category.replace(/\n/g, '\\n')),
+            JSON.stringify(item.step.replace(/\n/g, '\\n')),
+            JSON.stringify(item.challenge.replace(/\n/g, '\\n')),
+            JSON.stringify(item.solution.replace(/\n/g, '\\n')),
+            JSON.stringify(item.ownership.replace(/\n/g, '\\n')),
+            JSON.stringify(getChallengeType(item.type).replace(/\n/g, '\\n'))
+        ]);
+
+        let csvContent = headers.map(header => `"${header}"`).join(',') + '\n';
+        csvContent += rows.map(row => row.join(',')).join('\n');
+
+        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement('a');
+        if (link.download !== undefined) {
+            const url = URL.createObjectURL(blob);
+            link.setAttribute('href', url);
+            link.setAttribute('download', 'project_challenges.csv');
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        } else {
+            alert('Your browser does not support automatic CSV download. Please copy the content below:\n\n' + csvContent);
+        }
+    }
+
 
     function updateActiveLink() {
         document.querySelectorAll('.sidebar-link').forEach(link => {
@@ -786,14 +1354,13 @@ document.addEventListener('DOMContentLoaded', () => {
     function handleNavClick(e) {
         e.preventDefault();
         const targetPhase = e.target.closest('.sidebar-link').dataset.phase;
-        if (targetPhase) { // Ensure a phase was clicked
-            if (targetPhase === 'Dashboard') {
-                activePhase = 'Dashboard'; // Ensure activePhase is correct
-                currentTableType = ''; // Clear table display
-                renderContent(); // Force re-render of dashboard
-            } else if (targetPhase !== activePhase) {
+        if (targetPhase) {
+            // Force re-render if it's a different phase OR if it's the same phase but we're currently viewing a table (to go back to phase detail)
+            if (targetPhase !== activePhase || (targetPhase === activePhase && currentTableType)) {
                 activePhase = targetPhase;
-                currentTableType = ''; // Clear table display
+                currentTableType = ''; // Reset table view when navigating
+                currentTableData = [];
+                currentTableTitle = '';
                 renderContent();
             }
         }
@@ -812,7 +1379,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 content.style.maxHeight = null;
                 icon.classList.remove('rotate-180');
             } else {
-                // Close other open accordions
+                // Close all other accordions first
                 document.querySelectorAll('.accordion-content').forEach(el => el.style.maxHeight = null);
                 document.querySelectorAll('.accordion-toggle svg').forEach(svg => svg.classList.remove('rotate-180'));
 
@@ -823,7 +1390,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     navigation.addEventListener('click', handleNavClick);
-    // Event delegation for accordion toggles within contentContainer
     contentContainer.addEventListener('click', handleAccordionToggle);
 
     menuToggle.addEventListener('click', () => {
